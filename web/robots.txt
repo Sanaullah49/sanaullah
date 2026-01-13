@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Sitemap: https://thesanaullah.dev/sitemap.xml
+
+# Allow search engines to index everything
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
