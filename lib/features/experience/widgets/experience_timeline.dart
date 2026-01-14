@@ -303,8 +303,7 @@ class _ExperienceTimelineItemState extends State<ExperienceTimelineItem> {
             ),
           ],
         ),
-        transform: Matrix4.identity()
-          ..translateByDouble(_isHovered ? 8.0 : 0.0, 0.0, 0.0, 0.0),
+        transform: Matrix4.identity()..translate(_isHovered ? 8.0 : 0.0, 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -49,8 +49,7 @@ class _SkillCategoryCardState extends State<SkillCategoryCard> {
             ),
           ],
         ),
-        transform: Matrix4.identity()
-          ..translateByDouble(0.0, _isHovered ? -8.0 : 0.0, 0.0, 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -8.0 : 0.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

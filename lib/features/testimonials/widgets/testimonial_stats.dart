@@ -136,8 +136,7 @@ class _TestimonialStatCardState extends State<_TestimonialStatCard> {
                 ]
               : null,
         ),
-        transform: Matrix4.identity()
-          ..translateByDouble(0.0, _isHovered ? -5.0 : 0.0, 0.0, 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -5.0 : 0.0),
         child: Column(
           children: [
             AnimatedContainer(

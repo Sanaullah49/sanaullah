@@ -73,8 +73,7 @@ class _HeroImageState extends State<HeroImage>
                   duration: const Duration(milliseconds: 300),
                   width: size,
                   height: size,
-                  transform: Matrix4.identity()
-                    ..scaleByDouble(_isHovered ? 1.03 : 1.0, 0.0, 0.0, 0.0),
+                  transform: Matrix4.identity()..scale(_isHovered ? 1.03 : 1.0),
                   transformAlignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,

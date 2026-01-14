@@ -224,8 +224,7 @@ class _GitHubStatItemState extends State<_GitHubStatItem> {
                 ]
               : null,
         ),
-        transform: Matrix4.identity()
-          ..translateByDouble(0.0, _isHovered ? -4.0 : 0.0, 0.0, 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -4.0 : 0.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

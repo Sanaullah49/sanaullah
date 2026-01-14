@@ -54,7 +54,7 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
             ],
           ),
           transform: Matrix4.identity()
-            ..translateByDouble(0.0, _isHovered ? -4.0 : 0.0, 0.0, 0.0),
+            ..translate(0.0, _isHovered ? -4.0 : 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

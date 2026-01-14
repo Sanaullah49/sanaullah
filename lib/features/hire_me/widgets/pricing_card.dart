@@ -80,12 +80,7 @@ Thanks,
           ],
         ),
         transform: Matrix4.identity()
-          ..translateByDouble(
-            0.0,
-            _isHovered || plan.isPopular ? -6.0 : 0.0,
-            0.0,
-            0.0,
-          ),
+          ..translate(0.0, _isHovered || plan.isPopular ? -6.0 : 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

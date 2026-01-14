@@ -306,8 +306,7 @@ class _ContributionCellState extends State<_ContributionCell> {
                 ? Border.all(color: AppColors.primary, width: 1)
                 : null,
           ),
-          transform: Matrix4.identity()
-            ..scaleByDouble(_isHovered ? 1.2 : 1.0, 0.0, 0.0, 0.0),
+          transform: Matrix4.identity()..scale(_isHovered ? 1.2 : 1.0),
         ),
       ),
     );

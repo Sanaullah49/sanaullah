@@ -214,7 +214,7 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
             width: 280,
             height: 580,
             transform: Matrix4.identity()
-              ..translateByDouble(0.0, _isHovered ? -10.0 : 0.0, 0.0, 0.0),
+              ..translate(0.0, _isHovered ? -10.0 : 0.0),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
               borderRadius: BorderRadius.circular(45),

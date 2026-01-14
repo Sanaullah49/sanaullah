@@ -53,7 +53,7 @@ class _PubDevPackageCardState extends State<PubDevPackageCard> {
             ],
           ),
           transform: Matrix4.identity()
-            ..translateByDouble(0.0, _isHovered ? -6.0 : 0.0, 0.0, 0.0),
+            ..translate(0.0, _isHovered ? -6.0 : 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
