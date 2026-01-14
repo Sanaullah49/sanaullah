@@ -57,35 +57,51 @@ class _ProjectsSectionState extends State<ProjectsSection> {
   }
 
   Widget _buildProjectsGrid(BuildContext context, List<dynamic> projects) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
+    final screenWidth = MediaQuery.of(context).size.width;
 
-    final crossAxisCount = isMobile ? 1 : (isTablet ? 2 : 2);
+    int crossAxisCount;
+    double childAspectRatio;
+    double spacing;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: isMobile ? 0.85 : (isTablet ? 0.9 : 1.1),
+    if (screenWidth < 600) {
+      crossAxisCount = 1;
+      childAspectRatio = 0.75;
+      spacing = 20.0;
+    } else if (screenWidth < 900) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.8;
+      spacing = 20.0;
+    } else if (screenWidth < 1200) {
+      crossAxisCount = 2;
+      childAspectRatio = 1.0;
+      spacing = 24.0;
+    } else {
+      crossAxisCount = 2;
+      childAspectRatio = 1.15;
+      spacing = 28.0;
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
+        childAspectRatio: childAspectRatio,
+      ),
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return AnimatedOpacity(
+          duration: Duration(milliseconds: 500 + (index * 150)),
+          opacity: _isVisible ? 1.0 : 0.0,
+          child: AnimatedSlide(
+            duration: Duration(milliseconds: 500 + (index * 150)),
+            offset: _isVisible ? Offset.zero : const Offset(0, 0.2),
+            curve: Curves.easeOutCubic,
+            child: ProjectCard(project: projects[index], index: index),
           ),
-          itemCount: projects.length,
-          itemBuilder: (context, index) {
-            return AnimatedOpacity(
-              duration: Duration(milliseconds: 500 + (index * 150)),
-              opacity: _isVisible ? 1.0 : 0.0,
-              child: AnimatedSlide(
-                duration: Duration(milliseconds: 500 + (index * 150)),
-                offset: _isVisible ? Offset.zero : const Offset(0, 0.2),
-                curve: Curves.easeOutCubic,
-                child: ProjectCard(project: projects[index], index: index),
-              ),
-            );
-          },
         );
       },
     );

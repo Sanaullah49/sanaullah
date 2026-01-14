@@ -25,20 +25,32 @@ class PhoneMockup extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final mockupWidth = width ?? constraints.maxWidth * 0.6;
-        final mockupHeight = height ?? constraints.maxHeight * 0.95;
-        final aspectRatio = 0.48;
+        final availableWidth = width ?? constraints.maxWidth;
+        final availableHeight = height ?? constraints.maxHeight;
 
-        final actualWidth = mockupWidth.clamp(120.0, 200.0);
-        final actualHeight = actualWidth / aspectRatio;
+        const aspectRatio = 0.48;
+
+        double mockupWidth;
+        double mockupHeight;
+
+        if (availableWidth * (1 / aspectRatio) <= availableHeight) {
+          mockupWidth = availableWidth;
+          mockupHeight = availableWidth / aspectRatio;
+        } else {
+          mockupHeight = availableHeight;
+          mockupWidth = availableHeight * aspectRatio;
+        }
+
+        mockupWidth = mockupWidth.clamp(80.0, 200.0);
+        mockupHeight = mockupHeight.clamp(160.0, 420.0);
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          width: actualWidth,
-          height: actualHeight.clamp(0.0, mockupHeight),
+          width: mockupWidth,
+          height: mockupHeight,
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(mockupWidth * 0.14),
             border: Border.all(
               color: isDark
                   ? Colors.white.withValues(alpha: 0.1)
@@ -62,7 +74,7 @@ class PhoneMockup extends StatelessWidget {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(mockupWidth * 0.125),
             child: Stack(
               children: [
                 Positioned.fill(
@@ -70,11 +82,11 @@ class PhoneMockup extends StatelessWidget {
                     margin: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: isDark ? Colors.black : Colors.white,
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(mockupWidth * 0.11),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(22),
-                      child: _buildScreenContent(context),
+                      borderRadius: BorderRadius.circular(mockupWidth * 0.11),
+                      child: _buildScreenContent(context, mockupWidth),
                     ),
                   ),
                 ),
@@ -85,8 +97,8 @@ class PhoneMockup extends StatelessWidget {
                   right: 0,
                   child: Center(
                     child: Container(
-                      width: actualWidth * 0.35,
-                      height: 25,
+                      width: mockupWidth * 0.35,
+                      height: mockupHeight * 0.045,
                       decoration: BoxDecoration(
                         color: isDark ? Colors.black : const Color(0xFF1C1C1E),
                         borderRadius: BorderRadius.circular(15),
@@ -101,7 +113,7 @@ class PhoneMockup extends StatelessWidget {
                   right: 0,
                   child: Center(
                     child: Container(
-                      width: actualWidth * 0.35,
+                      width: mockupWidth * 0.35,
                       height: 5,
                       decoration: BoxDecoration(
                         color: isDark
@@ -120,17 +132,17 @@ class PhoneMockup extends StatelessWidget {
     );
   }
 
-  Widget _buildScreenContent(BuildContext context) {
+  Widget _buildScreenContent(BuildContext context, double mockupWidth) {
     return Image.asset(
       imagePath,
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) {
-        return _buildPlaceholderContent(context);
+        return _buildPlaceholderContent(context, mockupWidth);
       },
     );
   }
 
-  Widget _buildPlaceholderContent(BuildContext context) {
+  Widget _buildPlaceholderContent(BuildContext context, double mockupWidth) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -147,10 +159,10 @@ class PhoneMockup extends StatelessWidget {
         children: [
           Icon(
             Icons.phone_android_rounded,
-            size: 48,
+            size: mockupWidth * 0.25,
             color: Colors.white.withValues(alpha: 0.9),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: mockupWidth * 0.06),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -160,7 +172,7 @@ class PhoneMockup extends StatelessWidget {
             child: Text(
               'Preview',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: mockupWidth * 0.06,
                 fontWeight: FontWeight.w600,
                 color: Colors.white.withValues(alpha: 0.9),
               ),
@@ -203,16 +215,21 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
+    final mockupWidth = isMobile ? 220.0 : 280.0;
+    final mockupHeight = isMobile ? 450.0 : 580.0;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            width: 280,
-            height: 580,
+            width: mockupWidth,
+            height: mockupHeight,
             transform: Matrix4.identity()
               ..translate(0.0, _isHovered ? -10.0 : 0.0),
             decoration: BoxDecoration(
@@ -251,7 +268,6 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
                       ),
                     ),
                   ),
-
                   Positioned(
                     top: 12,
                     left: 0,
@@ -269,7 +285,6 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
                       ),
                     ),
                   ),
-
                   Positioned(
                     bottom: 10,
                     left: 0,
@@ -291,7 +306,6 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
               ),
             ),
           ),
-
           if (_allImages.length > 1) ...[
             const SizedBox(height: 24),
             _buildIndicators(),
@@ -354,7 +368,6 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(_allImages.length, (index) {
         final isActive = index == _currentIndex;
-
         return GestureDetector(
           onTap: () => setState(() => _currentIndex = index),
           child: AnimatedContainer(

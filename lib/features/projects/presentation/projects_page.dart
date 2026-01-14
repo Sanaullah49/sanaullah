@@ -29,37 +29,44 @@ class _ProjectsPageState extends State<ProjectsPage> {
     final isMobile = context.isMobile;
     final horizontalPadding = context.horizontalPadding;
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: isMobile ? 40 : 80,
-      ),
-      child: Column(
-        children: [
-          const SectionTitle(
-            tag: 'MY WORK',
-            title: 'All Projects',
-            subtitle:
-                'Explore my complete portfolio of mobile apps, packages, and open-source contributions',
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding,
+          vertical: isMobile ? 40 : 80,
+        ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1400),
+          child: Column(
+            children: [
+              const SectionTitle(
+                tag: 'MY WORK',
+                title: 'All Projects',
+                subtitle:
+                    'Explore my complete portfolio of mobile apps, packages, and open-source contributions',
+              ),
+
+              SizedBox(height: isMobile ? 32 : 48),
+
+              _buildCategoryFilters(context),
+
+              SizedBox(height: isMobile ? 32 : 48),
+
+              _buildProjectsGrid(context),
+            ],
           ),
-
-          SizedBox(height: isMobile ? 32 : 48),
-
-          _buildCategoryFilters(context),
-
-          SizedBox(height: isMobile ? 32 : 48),
-
-          _buildProjectsGrid(context),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildCategoryFilters(BuildContext context) {
     final categories = ProjectsData.availableCategories;
+    final isMobile = context.isMobile;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 0),
       child: Row(
         children: [
           _CategoryChip(
@@ -68,9 +75,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
             isSelected: _selectedCategory == null,
             onTap: () => setState(() => _selectedCategory = null),
           ),
-
           const SizedBox(width: 12),
-
           ...categories.map(
             (category) => Padding(
               padding: const EdgeInsets.only(right: 12),
@@ -89,9 +94,37 @@ class _ProjectsPageState extends State<ProjectsPage> {
   }
 
   Widget _buildProjectsGrid(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
-    final crossAxisCount = isMobile ? 1 : (isTablet ? 2 : 3);
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    int crossAxisCount;
+    double childAspectRatio;
+    double spacing;
+
+    if (screenWidth < 600) {
+      crossAxisCount = 1;
+      childAspectRatio = 0.75;
+      spacing = 20.0;
+    } else if (screenWidth < 700) {
+      crossAxisCount = 1;
+      childAspectRatio = 0.85;
+      spacing = 24.0;
+    } else if (screenWidth < 900) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.78;
+      spacing = 20.0;
+    } else if (screenWidth < 1100) {
+      crossAxisCount = 2;
+      childAspectRatio = 0.95;
+      spacing = 24.0;
+    } else if (screenWidth < 1400) {
+      crossAxisCount = 2;
+      childAspectRatio = 1.05;
+      spacing = 28.0;
+    } else {
+      crossAxisCount = 3;
+      childAspectRatio = 0.95;
+      spacing = 32.0;
+    }
 
     if (_filteredProjects.isEmpty) {
       return _buildEmptyState(context);
@@ -100,11 +133,12 @@ class _ProjectsPageState extends State<ProjectsPage> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
-        crossAxisSpacing: 24,
-        mainAxisSpacing: 24,
-        childAspectRatio: isMobile ? 0.85 : 0.95,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
+        childAspectRatio: childAspectRatio,
       ),
       itemCount: _filteredProjects.length,
       itemBuilder: (context, index) {
@@ -172,6 +206,7 @@ class _CategoryChipState extends State<_CategoryChip> {
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
     final chipColor = widget.color ?? colorScheme.primary;
+    final isMobile = context.isMobile;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -181,7 +216,10 @@ class _CategoryChipState extends State<_CategoryChip> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 14 : 16,
+            vertical: isMobile ? 8 : 10,
+          ),
           decoration: BoxDecoration(
             color: widget.isSelected
                 ? chipColor.withValues(alpha: 0.15)
@@ -205,16 +243,16 @@ class _CategoryChipState extends State<_CategoryChip> {
             children: [
               Icon(
                 widget.icon,
-                size: 18,
+                size: isMobile ? 16 : 18,
                 color: widget.isSelected
                     ? chipColor
                     : colorScheme.onSurfaceVariant,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: isMobile ? 6 : 8),
               Text(
                 widget.label,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: isMobile ? 13 : 14,
                   fontWeight: widget.isSelected
                       ? FontWeight.w600
                       : FontWeight.w500,

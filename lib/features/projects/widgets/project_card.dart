@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../../core/utils/url_launcher_utils.dart';
-import '../../../core/widgets/tech_badge.dart';
 import '../../../router/route_names.dart';
 import '../models/project_model.dart';
 import 'phone_mockup.dart';
@@ -65,6 +65,14 @@ class _ProjectCardState extends State<ProjectCard>
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
     final project = widget.project;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final bool isMobile = screenWidth < 600;
+    final bool isSmallTablet = screenWidth >= 600 && screenWidth < 900;
+    final bool isLargeTablet = screenWidth >= 900 && screenWidth < 1100;
+    final bool isTablet = isSmallTablet || isLargeTablet;
+
+    final borderRadius = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
 
     return MouseRegion(
       onEnter: (_) => _onHover(true),
@@ -81,12 +89,12 @@ class _ProjectCardState extends State<ProjectCard>
             duration: const Duration(milliseconds: 250),
             decoration: BoxDecoration(
               color: isDark ? AppColors.darkCard : AppColors.lightCard,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
                 color: _isHovered
                     ? project.accentColor.withValues(alpha: 0.5)
                     : colorScheme.outline.withValues(alpha: 0.1),
-                width: 1.5,
+                width: isTablet ? 2.0 : 1.5,
               ),
               boxShadow: [
                 BoxShadow(
@@ -98,13 +106,29 @@ class _ProjectCardState extends State<ProjectCard>
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 5, child: _buildMockupSection(context)),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: isSmallTablet
+                        ? 6
+                        : (isLargeTablet ? 5 : (isMobile ? 5 : 6)),
+                    child: _buildMockupSection(
+                      context,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                    ),
+                  ),
 
-                Expanded(flex: 4, child: _buildContentSection(context)),
-              ],
+                  _buildContentSection(
+                    context,
+                    isMobile: isMobile,
+                    isTablet: isTablet,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -112,11 +136,17 @@ class _ProjectCardState extends State<ProjectCard>
     );
   }
 
-  Widget _buildMockupSection(BuildContext context) {
+  Widget _buildMockupSection(
+    BuildContext context, {
+    required bool isMobile,
+    required bool isTablet,
+  }) {
     final project = widget.project;
+    final padding = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
 
     return Container(
       width: double.infinity,
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -126,7 +156,6 @@ class _ProjectCardState extends State<ProjectCard>
             project.accentColor.withValues(alpha: 0.05),
           ],
         ),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Stack(
         children: [
@@ -134,60 +163,84 @@ class _ProjectCardState extends State<ProjectCard>
             child: CustomPaint(
               painter: _GridPatternPainter(
                 color: project.accentColor.withValues(alpha: 0.05),
+                spacing: isTablet ? 20.0 : 25.0,
               ),
             ),
           ),
 
           Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                transform: Matrix4.identity()
-                  ..translate(0.0, _isHovered ? -10.0 : 0.0),
-                child: PhoneMockup(
-                  imagePath: project.mockupImage,
-                  accentColor: project.accentColor,
-                  isHovered: _isHovered,
-                ),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxHeight = constraints.maxHeight * 0.88;
+                final maxWidth = constraints.maxWidth * (isTablet ? 0.6 : 0.7);
+
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: maxHeight.clamp(140, 320),
+                    maxWidth: maxWidth.clamp(90, 180),
+                  ),
+                  child: PhoneMockup(
+                    imagePath: project.mockupImage,
+                    accentColor: project.accentColor,
+                    isHovered: _isHovered,
+                  ),
+                );
+              },
             ),
           ),
 
-          Positioned(top: 16, left: 16, child: _buildCategoryBadge(context)),
+          Positioned(
+            top: isTablet ? 10 : 8,
+            left: isTablet ? 10 : 8,
+            child: _buildCategoryBadge(context, isTablet: isTablet),
+          ),
 
           if (project.status != ProjectStatus.completed)
-            Positioned(top: 16, right: 16, child: _buildStatusBadge(context)),
+            Positioned(
+              top: isTablet ? 10 : 8,
+              right: isTablet ? 10 : 8,
+              child: _buildStatusBadge(context, isTablet: isTablet),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryBadge(BuildContext context) {
+  Widget _buildCategoryBadge(BuildContext context, {required bool isTablet}) {
     final project = widget.project;
     final isDark = context.isDarkMode;
+    final isMobile = context.isMobile;
+
+    final hPadding = isMobile ? 8.0 : (isTablet ? 10.0 : 12.0);
+    final vPadding = isMobile ? 4.0 : (isTablet ? 5.0 : 6.0);
+    final iconSize = isMobile ? 12.0 : (isTablet ? 13.0 : 14.0);
+    final fontSize = isMobile ? 9.0 : (isTablet ? 10.0 : 11.0);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
       decoration: BoxDecoration(
         color: (isDark ? AppColors.darkCard : AppColors.lightCard).withValues(
-          alpha: 0.9,
+          alpha: 0.95,
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: project.category.color.withValues(alpha: 0.3),
-          width: 1,
+          width: isTablet ? 1.5 : 1.0,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(project.category.icon, size: 14, color: project.category.color),
-          const SizedBox(width: 6),
+          Icon(
+            project.category.icon,
+            size: iconSize,
+            color: project.category.color,
+          ),
+          SizedBox(width: isMobile ? 4 : (isTablet ? 5 : 6)),
           Text(
             project.category.label,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: fontSize,
               fontWeight: FontWeight.w600,
               color: project.category.color,
             ),
@@ -197,11 +250,16 @@ class _ProjectCardState extends State<ProjectCard>
     );
   }
 
-  Widget _buildStatusBadge(BuildContext context) {
+  Widget _buildStatusBadge(BuildContext context, {required bool isTablet}) {
     final project = widget.project;
+    final isMobile = context.isMobile;
+
+    final hPadding = isMobile ? 6.0 : (isTablet ? 8.0 : 10.0);
+    final vPadding = isMobile ? 3.0 : (isTablet ? 4.0 : 5.0);
+    final fontSize = isMobile ? 8.0 : (isTablet ? 9.0 : 10.0);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
       decoration: BoxDecoration(
         color: project.status.color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
@@ -213,7 +271,7 @@ class _ProjectCardState extends State<ProjectCard>
       child: Text(
         project.status.label,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: fontSize,
           fontWeight: FontWeight.w600,
           color: project.status.color,
         ),
@@ -221,58 +279,77 @@ class _ProjectCardState extends State<ProjectCard>
     );
   }
 
-  Widget _buildContentSection(BuildContext context) {
+  Widget _buildContentSection(
+    BuildContext context, {
+    required bool isMobile,
+    required bool isTablet,
+  }) {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
     final project = widget.project;
 
+    final padding = isMobile ? 16.0 : (isTablet ? 18.0 : 20.0);
+
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             project.title,
-            style: textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: _isHovered ? project.accentColor : colorScheme.onSurface,
-            ),
+            style:
+                (isMobile
+                        ? textTheme.titleSmall
+                        : (isTablet
+                              ? textTheme.titleMedium
+                              : textTheme.titleMedium))
+                    ?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: isTablet ? 17.0 : null,
+                      color: _isHovered
+                          ? project.accentColor
+                          : colorScheme.onSurface,
+                    ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: isMobile ? 6 : (isTablet ? 7 : 8)),
 
-          Expanded(
-            child: Text(
-              project.shortDescription,
-              style: textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                height: 1.5,
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+          Text(
+            project.shortDescription,
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              height: 1.5,
+              fontSize: isMobile ? 12 : (isTablet ? 13 : 14),
             ),
+            maxLines: isTablet ? 2 : (isMobile ? 2 : 3),
+            overflow: TextOverflow.ellipsis,
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: isMobile ? 10 : (isTablet ? 11 : 12)),
 
-          TechBadgeRow(
-            technologies: project.technologies.take(4).toList(),
-            spacing: 6,
-            runSpacing: 6,
+          Wrap(
+            spacing: isTablet ? 7.0 : 6.0,
+            runSpacing: isTablet ? 7.0 : 6.0,
+            children: project.technologies
+                .take(isTablet ? 4 : (isMobile ? 3 : 4))
+                .map((tech) => _TechChip(tech: tech, isTablet: isTablet))
+                .toList(),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : (isTablet ? 14 : 16)),
 
-          _buildActionButtons(context),
+          _buildActionButtons(context, isTablet: isTablet),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, {required bool isTablet}) {
     final project = widget.project;
+    final isMobile = context.isMobile;
 
     return Row(
       children: [
@@ -282,25 +359,62 @@ class _ProjectCardState extends State<ProjectCard>
             icon: Icons.arrow_forward_rounded,
             color: project.accentColor,
             isHovered: _isHovered,
+            isMobile: isMobile,
+            isTablet: isTablet,
             onTap: () => context.go(RouteNames.projectDetail(project.slug)),
           ),
         ),
-
-        const SizedBox(width: 12),
-
-        if (project.hasLinks)
+        if (project.hasLinks) ...[
+          SizedBox(width: isTablet ? 10 : 12),
           _IconActionButton(
             icon: project.githubUrl != null
                 ? Icons.code_rounded
                 : Icons.open_in_new_rounded,
             tooltip: project.primaryLinkLabel,
+            isTablet: isTablet,
             onTap: () {
               if (project.primaryLink != null) {
                 UrlLauncherUtils.launchURL(project.primaryLink!);
               }
             },
           ),
+        ],
       ],
+    );
+  }
+}
+
+class _TechChip extends StatelessWidget {
+  final String tech;
+  final bool isTablet;
+
+  const _TechChip({required this.tech, required this.isTablet});
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = context.isMobile;
+    final hPadding = isMobile ? 6.0 : (isTablet ? 7.0 : 8.0);
+    final vPadding = isMobile ? 3.0 : (isTablet ? 4.0 : 4.0);
+    final fontSize = isMobile ? 9.0 : (isTablet ? 10.0 : 10.0);
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
+      decoration: BoxDecoration(
+        color: AppColors.getTechColor(tech).withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: AppColors.getTechColor(tech).withValues(alpha: 0.3),
+          width: isTablet ? 1.0 : 1.0,
+        ),
+      ),
+      child: Text(
+        tech,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w600,
+          color: AppColors.getTechColor(tech),
+        ),
+      ),
     );
   }
 }
@@ -310,6 +424,8 @@ class _ActionButton extends StatefulWidget {
   final IconData icon;
   final Color color;
   final bool isHovered;
+  final bool isMobile;
+  final bool isTablet;
   final VoidCallback onTap;
 
   const _ActionButton({
@@ -317,6 +433,8 @@ class _ActionButton extends StatefulWidget {
     required this.icon,
     required this.color,
     required this.isHovered,
+    required this.isMobile,
+    required this.isTablet,
     required this.onTap,
   });
 
@@ -330,6 +448,10 @@ class _ActionButtonState extends State<_ActionButton> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
+    final hPadding = widget.isMobile ? 12.0 : (widget.isTablet ? 14.0 : 16.0);
+    final vPadding = widget.isMobile ? 8.0 : (widget.isTablet ? 9.0 : 10.0);
+    final fontSize = widget.isMobile ? 12.0 : (widget.isTablet ? 13.0 : 13.0);
+    final iconSize = widget.isMobile ? 14.0 : (widget.isTablet ? 15.0 : 16.0);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isButtonHovered = true),
@@ -339,7 +461,10 @@ class _ActionButtonState extends State<_ActionButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: hPadding,
+            vertical: vPadding,
+          ),
           decoration: BoxDecoration(
             color: _isButtonHovered || widget.isHovered
                 ? widget.color.withValues(alpha: 0.15)
@@ -356,21 +481,25 @@ class _ActionButtonState extends State<_ActionButton> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: _isButtonHovered || widget.isHovered
-                      ? widget.color
-                      : context.colorScheme.onSurfaceVariant,
+              Flexible(
+                child: Text(
+                  widget.label,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w600,
+                    color: _isButtonHovered || widget.isHovered
+                        ? widget.color
+                        : context.colorScheme.onSurfaceVariant,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               const SizedBox(width: 6),
               Icon(
                 widget.icon,
-                size: 16,
+                size: iconSize,
                 color: _isButtonHovered || widget.isHovered
                     ? widget.color
                     : context.colorScheme.onSurfaceVariant,
@@ -386,11 +515,13 @@ class _ActionButtonState extends State<_ActionButton> {
 class _IconActionButton extends StatefulWidget {
   final IconData icon;
   final String tooltip;
+  final bool isTablet;
   final VoidCallback onTap;
 
   const _IconActionButton({
     required this.icon,
     required this.tooltip,
+    required this.isTablet,
     required this.onTap,
   });
 
@@ -405,6 +536,8 @@ class _IconActionButtonState extends State<_IconActionButton> {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
+    final size = widget.isTablet ? 42.0 : 40.0;
+    final iconSize = widget.isTablet ? 19.0 : 18.0;
 
     return Tooltip(
       message: widget.tooltip,
@@ -416,8 +549,8 @@ class _IconActionButtonState extends State<_IconActionButton> {
           onTap: widget.onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 40,
-            height: 40,
+            width: size,
+            height: size,
             decoration: BoxDecoration(
               color: _isHovered
                   ? colorScheme.primary.withValues(alpha: 0.15)
@@ -434,7 +567,7 @@ class _IconActionButtonState extends State<_IconActionButton> {
             ),
             child: Icon(
               widget.icon,
-              size: 18,
+              size: iconSize,
               color: _isHovered
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,
@@ -448,16 +581,15 @@ class _IconActionButtonState extends State<_IconActionButton> {
 
 class _GridPatternPainter extends CustomPainter {
   final Color color;
+  final double spacing;
 
-  _GridPatternPainter({required this.color});
+  _GridPatternPainter({required this.color, this.spacing = 25.0});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
       ..strokeWidth = 1;
-
-    const spacing = 25.0;
 
     for (double x = 0; x < size.width; x += spacing) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
