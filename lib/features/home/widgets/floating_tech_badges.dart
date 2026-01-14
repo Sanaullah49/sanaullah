@@ -186,56 +186,53 @@ class _FloatingBadgeState extends State<_FloatingBadge>
           ),
         );
       },
-      child: Tooltip(
-        message: widget.label,
-        child: Container(
-          padding: widget.isMobile
-              ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6)
-              : const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: widget.color.withValues(alpha: 0.4),
-              width: 1.5,
+      child: Container(
+        padding: widget.isMobile
+            ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6)
+            : const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: widget.color.withValues(alpha: 0.4),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: widget.color.withValues(alpha: 0.25),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: widget.color.withValues(alpha: 0.25),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: widget.isMobile ? 20 : 24,
+              height: widget.isMobile ? 20 : 24,
+              decoration: BoxDecoration(
+                color: widget.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
               ),
-              BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+              child: Center(child: _buildIcon(widget.isMobile ? 11 : 13)),
+            ),
+            SizedBox(width: widget.isMobile ? 6 : 8),
+            Text(
+              widget.label,
+              style: TextStyle(
+                fontSize: widget.isMobile ? 10 : 12,
+                fontWeight: FontWeight.w700,
+                color: isDark ? Colors.white : const Color(0xFF0A0A0A),
+                letterSpacing: 0.3,
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: widget.isMobile ? 20 : 24,
-                height: widget.isMobile ? 20 : 24,
-                decoration: BoxDecoration(
-                  color: widget.color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Center(child: _buildIcon(widget.isMobile ? 11 : 13)),
-              ),
-              SizedBox(width: widget.isMobile ? 6 : 8),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: widget.isMobile ? 10 : 12,
-                  fontWeight: FontWeight.w700,
-                  color: isDark ? Colors.white : const Color(0xFF0A0A0A),
-                  letterSpacing: 0.3,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

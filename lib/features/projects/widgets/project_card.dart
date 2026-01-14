@@ -539,39 +539,36 @@ class _IconActionButtonState extends State<_IconActionButton> {
     final size = widget.isTablet ? 42.0 : 40.0;
     final iconSize = widget.isTablet ? 19.0 : 18.0;
 
-    return Tooltip(
-      message: widget.tooltip,
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? colorScheme.primary.withValues(alpha: 0.15)
+                : (isDark
+                      ? AppColors.darkBgTertiary
+                      : AppColors.lightBgSecondary),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
               color: _isHovered
-                  ? colorScheme.primary.withValues(alpha: 0.15)
-                  : (isDark
-                        ? AppColors.darkBgTertiary
-                        : AppColors.lightBgSecondary),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: _isHovered
-                    ? colorScheme.primary.withValues(alpha: 0.5)
-                    : Colors.transparent,
-                width: 1,
-              ),
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1,
             ),
-            child: Icon(
-              widget.icon,
-              size: iconSize,
-              color: _isHovered
-                  ? colorScheme.primary
-                  : colorScheme.onSurfaceVariant,
-            ),
+          ),
+          child: Icon(
+            widget.icon,
+            size: iconSize,
+            color: _isHovered
+                ? colorScheme.primary
+                : colorScheme.onSurfaceVariant,
           ),
         ),
       ),

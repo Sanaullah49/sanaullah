@@ -69,31 +69,33 @@ class _PrimaryButtonState extends State<PrimaryButton>
   Widget build(BuildContext context) {
     final gradient = widget.gradient ?? AppColors.ctaGradient;
 
-    return MouseRegion(
-      onEnter: (_) => _onHoverChanged(true),
-      onExit: (_) => _onHoverChanged(false),
-      cursor: SystemMouseCursors.click,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Transform.scale(scale: _scaleAnimation.value, child: child);
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: widget.fullWidth ? double.infinity : widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: widget.showGlow && _isHovered
-                ? AppShadows.ctaGlowShadow
-                : null,
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: widget.isLoading ? null : widget.onPressed,
-              borderRadius: BorderRadius.circular(12),
+    return SizedBox(
+      width: widget.fullWidth ? double.infinity : widget.width,
+      height: widget.height,
+      child: MouseRegion(
+        onEnter: (_) => _onHoverChanged(true),
+        onExit: (_) => _onHoverChanged(false),
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: widget.isLoading ? null : widget.onPressed,
+          child: AnimatedBuilder(
+            animation: _scaleAnimation,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: child,
+              );
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: widget.showGlow && _isHovered
+                    ? AppShadows.ctaGlowShadow
+                    : null,
+              ),
               child: Center(
                 child: widget.isLoading
                     ? const SizedBox(

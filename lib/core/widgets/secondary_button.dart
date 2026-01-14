@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme/theme_provider.dart';
 
-/// Secondary outlined button
 class SecondaryButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -34,29 +33,28 @@ class _SecondaryButtonState extends State<SecondaryButton> {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: widget.fullWidth ? double.infinity : widget.width,
-        height: widget.height,
-        decoration: BoxDecoration(
-          color: _isHovered
-              ? colorScheme.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: _isHovered ? colorScheme.primary : colorScheme.outline,
-            width: 1.5,
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.isLoading ? null : widget.onPressed,
-            borderRadius: BorderRadius.circular(12),
+    return SizedBox(
+      width: widget.fullWidth ? double.infinity : widget.width,
+      height: widget.height,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: widget.isLoading ? null : widget.onPressed,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            decoration: BoxDecoration(
+              color: _isHovered
+                  ? colorScheme.primary.withValues(alpha: 0.1)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _isHovered ? colorScheme.primary : colorScheme.outline,
+                width: 1.5,
+              ),
+            ),
             child: Center(
               child: widget.isLoading
                   ? SizedBox(

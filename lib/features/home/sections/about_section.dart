@@ -24,38 +24,57 @@ class AboutSection extends StatelessWidget {
 
     return SectionWrapper(
       sectionId: 'about',
-      child: Column(
-        children: [
-          const SectionTitle(
-            tag: 'ABOUT ME',
-            title: 'Turning Ideas Into Reality',
-            subtitle:
-                'A passionate Flutter developer dedicated to creating exceptional mobile experiences',
-          ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Column(
+          children: [
+            const SectionTitle(
+              tag: 'ABOUT ME',
+              title: 'Turning Ideas Into Reality',
+              subtitle:
+                  'A passionate Flutter developer dedicated to creating exceptional mobile experiences',
+            ),
 
-          SizedBox(height: isMobile ? 48 : 80),
+            SizedBox(height: isMobile ? 48 : 80),
 
-          isMobile || isTablet
-              ? _buildMobileLayout(context)
-              : _buildDesktopLayout(context),
+            isMobile
+                ? _buildMobileLayout(context)
+                : (isTablet
+                      ? _buildTabletLayout(context)
+                      : _buildDesktopLayout(context)),
 
-          SizedBox(height: isMobile ? 48 : 80),
+            SizedBox(height: isMobile ? 48 : 80),
 
-          const StatsRow(),
-        ],
+            const StatsRow(),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildDesktopLayout(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Expanded(flex: 5, child: AboutImage()),
-
         const SizedBox(width: 80),
+        Expanded(
+          flex: 6,
+          child: _buildAboutContent(context, alignCenter: false),
+        ),
+      ],
+    );
+  }
 
-        Expanded(flex: 6, child: _buildAboutContent(context)),
+  Widget _buildTabletLayout(BuildContext context) {
+    return Column(
+      children: [
+        const AboutImage(isMobile: true),
+        const SizedBox(height: 60),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: _buildAboutContent(context, alignCenter: true),
+        ),
       ],
     );
   }
@@ -64,20 +83,19 @@ class AboutSection extends StatelessWidget {
     return Column(
       children: [
         const AboutImage(isMobile: true),
-
         const SizedBox(height: 48),
-
-        _buildAboutContent(context, centerAlign: true),
+        _buildAboutContent(context, alignCenter: true),
       ],
     );
   }
 
-  Widget _buildAboutContent(BuildContext context, {bool centerAlign = false}) {
+  Widget _buildAboutContent(BuildContext context, {required bool alignCenter}) {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
+    final textAlign = alignCenter ? TextAlign.center : TextAlign.start;
 
     return Column(
-      crossAxisAlignment: centerAlign
+      crossAxisAlignment: alignCenter
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
       children: [
@@ -87,30 +105,28 @@ class AboutSection extends StatelessWidget {
           "performant mobile applications that solve real-world problems.",
           style: textTheme.bodyLarge?.copyWith(
             height: 1.8,
+            fontSize: 16,
             color: colorScheme.onSurfaceVariant,
           ),
-          textAlign: centerAlign ? TextAlign.center : TextAlign.start,
+          textAlign: textAlign,
         ),
-
         const SizedBox(height: 24),
-
         Text(
           "My journey has taken me through diverse domains including healthcare apps that "
           "interface with medical devices, fintech solutions handling secure transactions, "
           "and consumer products used by thousands of users daily.",
           style: textTheme.bodyLarge?.copyWith(
             height: 1.8,
+            fontSize: 16,
             color: colorScheme.onSurfaceVariant,
           ),
-          textAlign: centerAlign ? TextAlign.center : TextAlign.start,
+          textAlign: textAlign,
         ),
-
         const SizedBox(height: 32),
-
         Wrap(
           spacing: 16,
           runSpacing: 16,
-          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
+          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
           children: [
             InfoCard(
               icon: Icons.location_on_rounded,
@@ -138,17 +154,13 @@ class AboutSection extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 40),
-
-        _buildWhatIDo(context, centerAlign),
-
+        _buildWhatIDo(context, alignCenter),
         const SizedBox(height: 40),
-
         Wrap(
           spacing: 16,
-          runSpacing: 12,
-          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
+          runSpacing: 16,
+          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
           children: [
             PrimaryButton(
               text: 'Download Resume',
@@ -166,9 +178,8 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildWhatIDo(BuildContext context, bool centerAlign) {
+  Widget _buildWhatIDo(BuildContext context, bool alignCenter) {
     final textTheme = context.textTheme;
-
     final items = [
       _WhatIDoItem(
         icon: Icons.phone_android_rounded,
@@ -193,20 +204,20 @@ class AboutSection extends StatelessWidget {
     ];
 
     return Column(
-      crossAxisAlignment: centerAlign
+      crossAxisAlignment: alignCenter
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
       children: [
         Text(
           'What I Do',
           style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-          textAlign: centerAlign ? TextAlign.center : TextAlign.start,
+          textAlign: alignCenter ? TextAlign.center : TextAlign.start,
         ),
         const SizedBox(height: 20),
         Wrap(
           spacing: 12,
           runSpacing: 12,
-          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
+          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
           children: items.map((item) => _WhatIDoChip(item: item)).toList(),
         ),
       ],

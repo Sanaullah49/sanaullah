@@ -21,25 +21,23 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildHeroSection(context),
-
-        _buildStorySection(context),
-
-        _buildEducationSection(context),
-
-        _buildValuesSection(context),
-
-        _buildFunFactsSection(context),
-
-        _buildCTASection(context),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildHeroSection(context),
+          _buildStorySection(context),
+          _buildEducationSection(context),
+          _buildValuesSection(context),
+          _buildFunFactsSection(context),
+          _buildCTASection(context),
+        ],
+      ),
     );
   }
 
   Widget _buildHeroSection(BuildContext context) {
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
     final horizontalPadding = context.horizontalPadding;
 
     return Container(
@@ -47,48 +45,54 @@ class AboutPage extends StatelessWidget {
         horizontal: horizontalPadding,
         vertical: isMobile ? 60 : 100,
       ),
-      child: Column(
-        children: [
-          const SectionTitle(
-            tag: 'ABOUT ME',
-            title: 'The Story Behind the Code',
-            subtitle:
-                'Get to know the developer behind the apps you use every day',
-          ),
-
-          SizedBox(height: isMobile ? 48 : 80),
-
-          isMobile
-              ? Column(
-                  children: [
-                    const AboutImage(isMobile: true),
-                    const SizedBox(height: 40),
-                    _buildQuickInfo(context),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Expanded(flex: 5, child: AboutImage()),
-                    const SizedBox(width: 80),
-                    Expanded(flex: 6, child: _buildQuickInfo(context)),
-                  ],
-                ),
-
-          SizedBox(height: isMobile ? 48 : 80),
-
-          const StatsRow(),
-        ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: Column(
+          children: [
+            const SectionTitle(
+              tag: 'ABOUT ME',
+              title: 'The Story Behind the Code',
+              subtitle:
+                  'Get to know the developer behind the apps you use every day',
+            ),
+            SizedBox(height: isMobile ? 48 : 80),
+            isMobile || isTablet
+                ? Column(
+                    children: [
+                      const AboutImage(isMobile: true),
+                      const SizedBox(height: 48),
+                      _buildQuickInfo(context, centerAlign: true),
+                    ],
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Expanded(flex: 5, child: AboutImage()),
+                      const SizedBox(width: 80),
+                      Expanded(
+                        flex: 6,
+                        child: _buildQuickInfo(context, centerAlign: false),
+                      ),
+                    ],
+                  ),
+            SizedBox(height: isMobile ? 48 : 80),
+            const StatsRow(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildQuickInfo(BuildContext context) {
+  Widget _buildQuickInfo(BuildContext context, {required bool centerAlign}) {
     final textTheme = context.textTheme;
     final colorScheme = context.colorScheme;
+    final align = centerAlign
+        ? CrossAxisAlignment.center
+        : CrossAxisAlignment.start;
+    final textAlign = centerAlign ? TextAlign.center : TextAlign.start;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: align,
       children: [
         Text(
           "Hello, I'm",
@@ -118,12 +122,13 @@ class AboutPage extends StatelessWidget {
             color: colorScheme.onSurfaceVariant,
             height: 1.8,
           ),
+          textAlign: textAlign,
         ),
         const SizedBox(height: 32),
-
         Wrap(
           spacing: 12,
           runSpacing: 12,
+          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
           children: [
             InfoCard(
               icon: Icons.location_on_rounded,
@@ -140,7 +145,7 @@ class AboutPage extends StatelessWidget {
             InfoCard(
               icon: Icons.school_rounded,
               label: 'Degree',
-              value: 'BS Information Technology',
+              value: 'BS IT',
               color: AppColors.accent,
             ),
             InfoCard(
@@ -151,9 +156,7 @@ class AboutPage extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 32),
-
         const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
       ],
     );
@@ -164,6 +167,7 @@ class AboutPage extends StatelessWidget {
     final horizontalPadding = context.horizontalPadding;
 
     return Container(
+      width: double.infinity,
       color: context.isDarkMode
           ? AppColors.darkBgSecondary
           : AppColors.lightBgSecondary,
@@ -177,9 +181,7 @@ class AboutPage extends StatelessWidget {
             tag: 'MY JOURNEY',
             title: 'From Curiosity to Career',
           ),
-
           const SizedBox(height: 48),
-
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
             child: Column(
@@ -207,14 +209,6 @@ class AboutPage extends StatelessWidget {
                   "taught me something new and fueled my passion for clean, "
                   "maintainable code.",
                 ),
-                const SizedBox(height: 24),
-                _buildStoryParagraph(
-                  context,
-                  "Today, I'm focused on building products that make a real difference "
-                  "in people's lives. Whether it's contributing to open source, "
-                  "mentoring junior developers, or crafting the next big app — "
-                  "I bring the same enthusiasm and dedication to everything I do.",
-                ),
               ],
             ),
           ),
@@ -229,6 +223,7 @@ class AboutPage extends StatelessWidget {
       style: context.textTheme.bodyLarge?.copyWith(
         color: context.colorScheme.onSurfaceVariant,
         height: 1.9,
+        fontSize: 17,
       ),
       textAlign: TextAlign.center,
     );
@@ -246,9 +241,7 @@ class AboutPage extends StatelessWidget {
       child: Column(
         children: [
           const SectionTitle(tag: 'EDUCATION', title: 'Academic Background'),
-
           const SizedBox(height: 48),
-
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 700),
             child: const TimelineItem(
@@ -319,9 +312,7 @@ class AboutPage extends StatelessWidget {
       child: Column(
         children: [
           const SectionTitle(tag: 'CORE VALUES', title: 'What I Stand For'),
-
           const SizedBox(height: 48),
-
           Wrap(
             spacing: 24,
             runSpacing: 24,
@@ -367,9 +358,7 @@ class AboutPage extends StatelessWidget {
       child: Column(
         children: [
           const SectionTitle(tag: 'FUN FACTS', title: 'Beyond the Code'),
-
           const SizedBox(height: 48),
-
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
             child: Wrap(
@@ -411,6 +400,7 @@ class AboutPage extends StatelessWidget {
     final horizontalPadding = context.horizontalPadding;
 
     return Container(
+      width: double.infinity,
       color: context.isDarkMode
           ? AppColors.darkBgSecondary
           : AppColors.lightBgSecondary,

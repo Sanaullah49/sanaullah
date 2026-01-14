@@ -28,13 +28,18 @@ class _InfoCardState extends State<InfoCard> {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmall = screenWidth < 400;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: EdgeInsets.symmetric(
+          horizontal: isSmall ? 12 : 20,
+          vertical: isSmall ? 12 : 16,
+        ),
         decoration: BoxDecoration(
           color: _isHovered
               ? widget.color.withValues(alpha: 0.1)
@@ -61,19 +66,21 @@ class _InfoCardState extends State<InfoCard> {
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 44,
-              height: 44,
+              width: isSmall ? 36 : 44,
+              height: isSmall ? 36 : 44,
               decoration: BoxDecoration(
                 color: widget.color.withValues(alpha: _isHovered ? 0.2 : 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Icon(widget.icon, size: 22, color: widget.color),
+                child: Icon(
+                  widget.icon,
+                  size: isSmall ? 18 : 22,
+                  color: widget.color,
+                ),
               ),
             ),
-
-            const SizedBox(width: 14),
-
+            SizedBox(width: isSmall ? 10 : 14),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -83,6 +90,7 @@ class _InfoCardState extends State<InfoCard> {
                   style: context.textTheme.labelSmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                     letterSpacing: 0.5,
+                    fontSize: isSmall ? 10 : null,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -91,6 +99,7 @@ class _InfoCardState extends State<InfoCard> {
                   style: context.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _isHovered ? widget.color : colorScheme.onSurface,
+                    fontSize: isSmall ? 13 : null,
                   ),
                 ),
               ],
