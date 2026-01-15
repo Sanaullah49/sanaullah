@@ -23,6 +23,83 @@ class _SkillCategoryCardState extends State<SkillCategoryCard> {
     final textTheme = context.textTheme;
     final category = widget.category;
 
+    final isMobileLayout = MediaQuery.of(context).size.width < 600;
+
+    if (isMobileLayout) {
+      final cardColor = isDark ? AppColors.darkCard : AppColors.lightCard;
+      final borderColor = colorScheme.outline.withValues(alpha: 0.1);
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: category.color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: category.color.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Icon(category.icon, size: 24, color: category.color),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              category.title,
+              textAlign: TextAlign.center,
+              style: textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              category.description,
+              textAlign: TextAlign.center,
+              style: textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                height: 1.5,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: category.skills.map((skill) {
+                return _SkillChip(
+                  label: skill,
+                  color: category.color,
+                  isHovered: false,
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      );
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
