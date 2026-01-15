@@ -28,7 +28,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
 
     return VisibilityDetector(
       key: const Key('open-source-section'),
@@ -41,14 +41,17 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
         sectionId: 'open-source',
         child: Column(
           children: [
-            const SectionTitle(
+            SectionTitle(
               tag: 'OPEN SOURCE',
               title: 'Contributing to the Community',
-              subtitle:
-                  'Building packages, sharing knowledge, and collaborating with developers worldwide',
+              subtitle: isSmallMobile
+                  ? 'Building packages and sharing knowledge'
+                  : 'Building packages, sharing knowledge, and collaborating with developers worldwide',
             ),
 
-            SizedBox(height: isMobile ? 48 : 64),
+            SizedBox(
+              height: context.responsive(mobile: 32, tablet: 40, desktop: 48),
+            ),
 
             AnimatedOpacity(
               duration: const Duration(milliseconds: 600),
@@ -61,19 +64,27 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
               ),
             ),
 
-            SizedBox(height: isMobile ? 48 : 64),
+            SizedBox(
+              height: context.responsive(mobile: 32, tablet: 40, desktop: 48),
+            ),
 
             _buildContributionSection(context),
 
-            SizedBox(height: isMobile ? 48 : 64),
+            SizedBox(
+              height: context.responsive(mobile: 32, tablet: 40, desktop: 48),
+            ),
 
             _buildPackagesSection(context),
 
-            SizedBox(height: isMobile ? 48 : 64),
+            SizedBox(
+              height: context.responsive(mobile: 32, tablet: 40, desktop: 48),
+            ),
 
             _buildReposSection(context),
 
-            SizedBox(height: isMobile ? 48 : 64),
+            SizedBox(
+              height: context.responsive(mobile: 32, tablet: 40, desktop: 48),
+            ),
 
             _buildCTASection(context),
           ],
@@ -150,6 +161,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
   Widget _buildPackagesSection(BuildContext context) {
     final textTheme = context.textTheme;
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
     final packages = OpenSourceData.packages;
 
     return AnimatedOpacity(
@@ -167,7 +179,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
                 Container(
                   width: 40,
                   height: 2,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.transparent, AppColors.accent],
                     ),
@@ -192,7 +204,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
                 Container(
                   width: 40,
                   height: 2,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [AppColors.accent, Colors.transparent],
                     ),
@@ -201,20 +213,33 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
               ],
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
-            Wrap(
-              spacing: 24,
-              runSpacing: 24,
-              alignment: WrapAlignment.center,
-              children: packages
-                  .map(
-                    (pkg) => SizedBox(
-                      width: isMobile ? double.infinity : 400,
-                      child: PubDevPackageCard(package: pkg),
-                    ),
-                  )
-                  .toList(),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                double cardWidth;
+                if (isMobile) {
+                  cardWidth = double.infinity;
+                } else if (isTablet || constraints.maxWidth < 900) {
+                  cardWidth = (constraints.maxWidth - 24) / 2;
+                } else {
+                  cardWidth = (constraints.maxWidth - 48) / 3;
+                }
+
+                return Wrap(
+                  spacing: 24,
+                  runSpacing: 24,
+                  alignment: WrapAlignment.center,
+                  children: packages
+                      .map(
+                        (pkg) => ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: cardWidth),
+                          child: PubDevPackageCard(package: pkg),
+                        ),
+                      )
+                      .toList(),
+                );
+              },
             ),
           ],
         ),
@@ -242,14 +267,14 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
                 Container(
                   width: 40,
                   height: 2,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.transparent, AppColors.success],
                     ),
                   ),
                 ),
                 const SizedBox(width: 16),
-                Icon(
+                const Icon(
                   Icons.folder_open_rounded,
                   color: AppColors.success,
                   size: 20,
@@ -267,7 +292,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
                 Container(
                   width: 40,
                   height: 2,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [AppColors.success, Colors.transparent],
                     ),
@@ -276,13 +301,33 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
               ],
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             LayoutBuilder(
               builder: (context, constraints) {
-                final crossAxisCount = isMobile
-                    ? 1
-                    : (constraints.maxWidth > 900 ? 3 : 2);
+                if (isMobile) {
+                  return Column(
+                    children: repos
+                        .map(
+                          (repo) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: GitHubRepoCard(repo: repo),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+
+                int crossAxisCount;
+                if (constraints.maxWidth > 1100) {
+                  crossAxisCount = 3;
+                } else if (constraints.maxWidth > 720) {
+                  crossAxisCount = 2;
+                } else {
+                  crossAxisCount = 1;
+                }
+
+                final aspectRatio = constraints.maxWidth > 1100 ? 1.4 : 1.3;
 
                 return GridView.builder(
                   shrinkWrap: true,
@@ -291,7 +336,7 @@ class _OpenSourceSectionState extends State<OpenSourceSection> {
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 24,
                     mainAxisSpacing: 24,
-                    childAspectRatio: isMobile ? 1.8 : 1.4,
+                    childAspectRatio: aspectRatio,
                   ),
                   itemCount: repos.length,
                   itemBuilder: (context, index) {

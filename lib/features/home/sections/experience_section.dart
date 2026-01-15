@@ -22,8 +22,8 @@ class _ExperienceSectionState extends State<ExperienceSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
     final isDark = context.isDarkMode;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
 
     return VisibilityDetector(
       key: const Key('experience-section'),
@@ -39,14 +39,17 @@ class _ExperienceSectionState extends State<ExperienceSection> {
           backgroundColor: Colors.transparent,
           child: Column(
             children: [
-              const SectionTitle(
+              SectionTitle(
                 tag: 'CAREER',
                 title: 'Work Experience',
-                subtitle:
-                    'My professional journey building impactful mobile applications across various industries',
+                subtitle: isSmallMobile
+                    ? 'My professional journey'
+                    : 'My professional journey building impactful mobile applications across various industries',
               ),
 
-              SizedBox(height: isMobile ? 32 : 48),
+              SizedBox(
+                height: context.responsive(mobile: 24, tablet: 36, desktop: 48),
+              ),
 
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 600),
@@ -59,14 +62,18 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                 ),
               ),
 
-              SizedBox(height: isMobile ? 48 : 64),
+              SizedBox(
+                height: context.responsive(mobile: 32, tablet: 48, desktop: 64),
+              ),
 
               ExperienceTimeline(
                 experiences: ExperienceData.experiences,
                 isVisible: _isVisible,
               ),
 
-              SizedBox(height: isMobile ? 48 : 64),
+              SizedBox(
+                height: context.responsive(mobile: 32, tablet: 48, desktop: 64),
+              ),
 
               _buildEducationSection(context),
             ],
@@ -77,8 +84,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
   }
 
   Widget _buildEducationSection(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
+    final isMobile = context.isMobile;
     final education = ExperienceData.education.first;
 
     return AnimatedOpacity(
@@ -90,55 +96,83 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         curve: Curves.easeOutCubic,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 40,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.transparent, colorScheme.primary],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Icon(
-                  Icons.school_rounded,
-                  color: colorScheme.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'EDUCATION',
-                  style: textTheme.labelMedium?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 2,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Container(
-                  width: 40,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [colorScheme.primary, Colors.transparent],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildEducationHeader(context),
 
-            const SizedBox(height: 32),
+            SizedBox(height: isMobile ? 20 : 32),
 
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
+              constraints: BoxConstraints(
+                maxWidth: context.responsive(
+                  mobile: double.infinity,
+                  tablet: 700,
+                  desktop: 800,
+                ),
+              ),
               child: _EducationCard(education: education),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildEducationHeader(BuildContext context) {
+    final textTheme = context.textTheme;
+    final colorScheme = context.colorScheme;
+    final isMobile = context.isMobile;
+
+    if (isMobile) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.school_rounded, color: colorScheme.primary, size: 18),
+          const SizedBox(width: 8),
+          Text(
+            'EDUCATION',
+            style: textTheme.labelMedium?.copyWith(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 40,
+          height: 2,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.transparent, colorScheme.primary],
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Icon(Icons.school_rounded, color: colorScheme.primary, size: 20),
+        const SizedBox(width: 8),
+        Text(
+          'EDUCATION',
+          style: textTheme.labelMedium?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 2,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Container(
+          width: 40,
+          height: 2,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [colorScheme.primary, Colors.transparent],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -159,18 +193,27 @@ class _EducationCardState extends State<_EducationCard> {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
-    final textTheme = context.textTheme;
     final education = widget.education;
+    final isMobile = context.isMobile;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(28),
+        padding: EdgeInsets.all(
+          context.responsive(
+            mobile: isSmallMobile ? 16 : 20,
+            tablet: 24,
+            desktop: 28,
+          ),
+        ),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkCard : AppColors.lightCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(
+            context.responsive(mobile: 16, tablet: 18, desktop: 20),
+          ),
           border: Border.all(
             color: _isHovered
                 ? education.accentColor.withOpacity(0.5)
@@ -187,86 +230,174 @@ class _EducationCardState extends State<_EducationCard> {
             ),
           ],
         ),
-        child: Row(
+        child: isMobile
+            ? _buildMobileLayout(context, education)
+            : _buildDesktopLayout(context, education),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context, dynamic education) {
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
+
+    return Column(
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          width: isSmallMobile ? 56 : 64,
+          height: isSmallMobile ? 56 : 64,
+          decoration: BoxDecoration(
+            color: education.accentColor.withOpacity(_isHovered ? 0.2 : 0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: education.accentColor.withOpacity(_isHovered ? 0.5 : 0.2),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              Icons.school_rounded,
+              size: isSmallMobile ? 24 : 28,
+              color: education.accentColor,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        Column(
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: education.accentColor.withOpacity(
-                  _isHovered ? 0.2 : 0.1,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: education.accentColor.withOpacity(
-                    _isHovered ? 0.5 : 0.2,
-                  ),
-                  width: 1,
-                ),
+            Text(
+              education.fullDegree,
+              style: textTheme.titleMedium?.copyWith(
+                fontSize: isSmallMobile ? 15 : null,
+                fontWeight: FontWeight.w600,
+                color: _isHovered
+                    ? education.accentColor
+                    : colorScheme.onSurface,
               ),
-              child: Center(
-                child: Icon(
-                  Icons.school_rounded,
-                  size: 28,
-                  color: education.accentColor,
-                ),
-              ),
+              textAlign: TextAlign.center,
             ),
 
-            const SizedBox(width: 24),
+            const SizedBox(height: 8),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    education.fullDegree,
-                    style: textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: _isHovered
-                          ? education.accentColor
-                          : colorScheme.onSurface,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    education.institution,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Row(
-                    children: [
-                      _buildMetaChip(
-                        context,
-                        icon: Icons.calendar_today_rounded,
-                        label: education.dateRange,
-                        color: education.accentColor,
-                      ),
-
-                      const SizedBox(width: 12),
-
-                      if (education.gpa != null)
-                        _buildMetaChip(
-                          context,
-                          icon: Icons.star_rounded,
-                          label: 'CGPA: ${education.gpa}',
-                          color: education.accentColor,
-                        ),
-                    ],
-                  ),
-                ],
+            Text(
+              education.institution,
+              style: textTheme.bodyMedium?.copyWith(
+                fontSize: isSmallMobile ? 13 : null,
+                color: colorScheme.onSurfaceVariant,
               ),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 16),
+
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                _buildMetaChip(
+                  context,
+                  icon: Icons.calendar_today_rounded,
+                  label: education.dateRange,
+                  color: education.accentColor,
+                ),
+                if (education.gpa != null)
+                  _buildMetaChip(
+                    context,
+                    icon: Icons.star_rounded,
+                    label: 'CGPA: ${education.gpa}',
+                    color: education.accentColor,
+                  ),
+              ],
             ),
           ],
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context, dynamic education) {
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
+
+    return Row(
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            color: education.accentColor.withOpacity(_isHovered ? 0.2 : 0.1),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: education.accentColor.withOpacity(_isHovered ? 0.5 : 0.2),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Icon(
+              Icons.school_rounded,
+              size: 28,
+              color: education.accentColor,
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 24),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                education.fullDegree,
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: _isHovered
+                      ? education.accentColor
+                      : colorScheme.onSurface,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                education.institution,
+                style: textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  _buildMetaChip(
+                    context,
+                    icon: Icons.calendar_today_rounded,
+                    label: education.dateRange,
+                    color: education.accentColor,
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  if (education.gpa != null)
+                    _buildMetaChip(
+                      context,
+                      icon: Icons.star_rounded,
+                      label: 'CGPA: ${education.gpa}',
+                      color: education.accentColor,
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -276,8 +407,13 @@ class _EducationCardState extends State<_EducationCard> {
     required String label,
     required Color color,
   }) {
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: isSmallMobile ? 8 : 10,
+        vertical: isSmallMobile ? 5 : 6,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
@@ -285,12 +421,12 @@ class _EducationCardState extends State<_EducationCard> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 6),
+          Icon(icon, size: isSmallMobile ? 11 : 12, color: color),
+          SizedBox(width: isSmallMobile ? 4 : 6),
           Text(
             label,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: isSmallMobile ? 10 : 11,
               fontWeight: FontWeight.w600,
               color: color,
             ),

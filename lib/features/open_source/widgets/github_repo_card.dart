@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../../core/utils/url_launcher_utils.dart';
 import '../models/github_models.dart';
 
@@ -24,6 +25,8 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
     final repo = widget.repo;
+    final isMobile = context.isMobile;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -33,10 +36,10 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
         onTap: () => UrlLauncherUtils.launchURL(repo.url),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(isMobile ? (isSmallMobile ? 14 : 16) : 20),
           decoration: BoxDecoration(
             color: isDark ? AppColors.darkCard : AppColors.lightCard,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(isMobile ? 14 : 16),
             border: Border.all(
               color: _isHovered
                   ? AppColors.success.withValues(alpha: 0.5)
@@ -48,38 +51,39 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
                 color: _isHovered
                     ? AppColors.success.withValues(alpha: 0.1)
                     : Colors.black.withValues(alpha: isDark ? 0.15 : 0.03),
-                blurRadius: _isHovered ? 25 : 10,
-                offset: Offset(0, _isHovered ? 10 : 5),
+                blurRadius: _isHovered ? 24 : 12,
+                offset: Offset(0, _isHovered ? 8 : 4),
               ),
             ],
           ),
           transform: Matrix4.identity()
-            ..translate(0.0, _isHovered ? -4.0 : 0.0),
+            ..translate(0.0, _isHovered ? -3.0 : 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: isMobile ? 36 : 40,
+                    height: isMobile ? 36 : 40,
                     decoration: BoxDecoration(
-                      color: AppColors.success.withValues(alpha: 0.1),
+                      color: AppColors.success.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Center(
                       child: FaIcon(
                         FontAwesomeIcons.folderOpen,
-                        size: 16,
+                        size: 14,
                         color: AppColors.success,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       repo.name,
                       style: textTheme.titleSmall?.copyWith(
+                        fontSize: isMobile ? 14 : 15,
                         fontWeight: FontWeight.w700,
                         color: _isHovered
                             ? AppColors.success
@@ -103,27 +107,26 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
-              Expanded(
-                child: Text(
-                  repo.description,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    height: 1.5,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                repo.description,
+                style: textTheme.bodySmall?.copyWith(
+                  fontSize: isMobile ? 12.5 : 13,
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.5,
                 ),
+                maxLines: isMobile ? 3 : 4,
+                overflow: TextOverflow.ellipsis,
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               Row(
                 children: [
                   Container(
-                    width: 12,
-                    height: 12,
+                    width: 10,
+                    height: 10,
                     decoration: BoxDecoration(
                       color: repo.languageColor,
                       shape: BoxShape.circle,
@@ -133,33 +136,36 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
                   Text(
                     repo.language,
                     style: textTheme.labelSmall?.copyWith(
+                      fontSize: 11,
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
 
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 14),
 
                   Icon(Icons.star_rounded, size: 14, color: AppColors.warning),
                   const SizedBox(width: 4),
                   Text(
                     repo.stars.toString(),
                     style: textTheme.labelSmall?.copyWith(
+                      fontSize: 11,
                       color: colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
 
                   FaIcon(
                     FontAwesomeIcons.codeFork,
-                    size: 12,
+                    size: 11,
                     color: colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     repo.forks.toString(),
                     style: textTheme.labelSmall?.copyWith(
+                      fontSize: 11,
                       color: colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
                     ),
@@ -168,18 +174,18 @@ class _GitHubRepoCardState extends State<GitHubRepoCard> {
               ),
 
               if (repo.topics.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
-                  children: repo.topics.take(3).map((topic) {
+                  children: repo.topics.take(isMobile ? 3 : 4).map((topic) {
                     return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 7 : 8,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
+                        color: AppColors.primary.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(

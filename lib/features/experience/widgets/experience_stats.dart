@@ -11,6 +11,9 @@ class ExperienceStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     final stats = [
       _StatItem(
@@ -39,7 +42,21 @@ class ExperienceStats extends StatelessWidget {
       ),
     ];
 
+    if (isSmallMobile) {
+      return Column(
+        children: stats
+            .map(
+              (stat) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _ExperienceStatCard(stat: stat),
+              ),
+            )
+            .toList(),
+      );
+    }
+
     if (isMobile) {
+      final cardWidth = (screenWidth - 64) / 2;
       return Wrap(
         spacing: 16,
         runSpacing: 16,
@@ -47,7 +64,23 @@ class ExperienceStats extends StatelessWidget {
         children: stats
             .map(
               (stat) => SizedBox(
-                width: (MediaQuery.of(context).size.width - 80) / 2,
+                width: cardWidth,
+                child: _ExperienceStatCard(stat: stat),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (isTablet) {
+      return Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        alignment: WrapAlignment.center,
+        children: stats
+            .map(
+              (stat) => SizedBox(
+                width: (screenWidth * 0.8 - 60) / 2,
                 child: _ExperienceStatCard(stat: stat),
               ),
             )
@@ -102,16 +135,30 @@ class _ExperienceStatCardState extends State<_ExperienceStatCard> {
     final colorScheme = context.colorScheme;
     final textTheme = context.textTheme;
     final stat = widget.stat;
+    final isSmallMobile = MediaQuery.of(context).size.width < 380;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        padding: EdgeInsets.symmetric(
+          vertical: context.responsive(
+            mobile: isSmallMobile ? 16 : 20,
+            tablet: 22,
+            desktop: 24,
+          ),
+          horizontal: context.responsive(
+            mobile: isSmallMobile ? 12 : 16,
+            tablet: 18,
+            desktop: 20,
+          ),
+        ),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkCard : AppColors.lightCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(
+            context.responsive(mobile: 16, tablet: 18, desktop: 20),
+          ),
           border: Border.all(
             color: _isHovered
                 ? stat.color.withValues(alpha: 0.5)
@@ -126,33 +173,65 @@ class _ExperienceStatCardState extends State<_ExperienceStatCard> {
                     offset: const Offset(0, 10),
                   ),
                 ]
-              : null,
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
         ),
         transform: Matrix4.identity()..translate(0.0, _isHovered ? -5.0 : 0.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              width: 56,
-              height: 56,
+              width: context.responsive(
+                mobile: isSmallMobile ? 48 : 52,
+                tablet: 54,
+                desktop: 56,
+              ),
+              height: context.responsive(
+                mobile: isSmallMobile ? 48 : 52,
+                tablet: 54,
+                desktop: 56,
+              ),
               decoration: BoxDecoration(
                 color: stat.color.withValues(alpha: _isHovered ? 0.2 : 0.1),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(
+                  context.responsive(mobile: 14, tablet: 15, desktop: 16),
+                ),
                 border: Border.all(
                   color: stat.color.withValues(alpha: _isHovered ? 0.5 : 0.2),
                   width: 1,
                 ),
               ),
               child: Center(
-                child: Icon(stat.icon, size: 26, color: stat.color),
+                child: Icon(
+                  stat.icon,
+                  size: context.responsive(
+                    mobile: isSmallMobile ? 22 : 24,
+                    tablet: 25,
+                    desktop: 26,
+                  ),
+                  color: stat.color,
+                ),
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(
+              height: context.responsive(mobile: 12, tablet: 14, desktop: 16),
+            ),
 
             Text(
               stat.value,
               style: textTheme.headlineSmall?.copyWith(
+                fontSize: context.responsive(
+                  mobile: isSmallMobile ? 20.0 : 22.0,
+                  tablet: 23.0,
+                  desktop: 24.0,
+                ),
                 fontWeight: FontWeight.w700,
                 color: _isHovered ? stat.color : colorScheme.onSurface,
               ),
@@ -163,8 +242,14 @@ class _ExperienceStatCardState extends State<_ExperienceStatCard> {
             Text(
               stat.label,
               style: textTheme.labelMedium?.copyWith(
+                fontSize: context.responsive(
+                  mobile: isSmallMobile ? 11.0 : 12.0,
+                  tablet: 12.5,
+                  desktop: 13.0,
+                ),
                 color: colorScheme.onSurfaceVariant,
               ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
