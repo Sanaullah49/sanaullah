@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
 import '../../../core/utils/responsive_utils.dart';
@@ -18,186 +18,191 @@ class ContactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
 
-    return SectionWrapper(
-      sectionId: 'contact',
-      child: Column(
-        children: [
-          const SectionTitle(
-            tag: 'CONTACT',
-            title: 'Let\'s Talk About Your Project',
-            subtitle:
-                'Serious about building a high-impact Flutter app? Tell me about your idea and I\'ll help you turn it into a production-ready product.',
-          ),
+    return VisibilityDetector(
+      key: const Key('contact-section'),
+      onVisibilityChanged: (info) {
+        if (info.visibleFraction > 0.3) {}
+      },
+      child: SectionWrapper(
+        sectionId: 'contact',
+        backgroundColor: context.isDarkMode
+            ? AppColors.darkBgSecondary
+            : AppColors.lightBgSecondary,
+        child: Column(
+          children: [
+            SectionTitle(
+              tag: 'CONTACT',
+              title: "Let's Build Something Great",
+              subtitle:
+                  "Serious about a high-impact Flutter app? Drop your idea below – I reply within 12–24 hours.",
+              centerAlign: true,
+            ),
 
-          SizedBox(height: isMobile ? 32 : 48),
+            const SizedBox(height: 32),
 
-          const TestimonialStatsInline(),
+            const TestimonialStatsInline(),
 
-          SizedBox(height: isMobile ? 40 : 60),
+            const SizedBox(height: 48),
 
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (isMobile || constraints.maxWidth < 900) {
-                return Column(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final bool useColumn = isMobile || constraints.maxWidth < 1000;
+
+                if (useColumn) {
+                  return const Column(
+                    children: [
+                      _ContactInfoCard(),
+                      SizedBox(height: 32),
+                      ContactForm(),
+                    ],
+                  );
+                }
+
+                return const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const _ContactInfoPanel(),
-                    const SizedBox(height: 32),
-                    const ContactForm(),
+                    Expanded(flex: 5, child: _ContactInfoCard()),
+                    SizedBox(width: 48),
+                    Expanded(flex: 6, child: ContactForm()),
                   ],
                 );
-              }
+              },
+            ),
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Expanded(flex: 4, child: _ContactInfoPanel()),
-                  SizedBox(width: 40),
-                  Expanded(flex: 5, child: ContactForm()),
-                ],
-              );
-            },
-          ),
-        ],
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ContactInfoPanel extends StatelessWidget {
-  const _ContactInfoPanel();
+class _ContactInfoCard extends StatelessWidget {
+  const _ContactInfoCard();
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final textTheme = context.textTheme;
     final isDark = context.isDarkMode;
+    final colorScheme = context.colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.all(24),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkCard : AppColors.lightCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.1),
+          color: colorScheme.outline.withValues(alpha: 0.12),
           width: 1.5,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Project Fit Check',
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'I\'m a good fit if you:',
-            style: textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+            'Perfect if you...',
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
-          _Bullet(
-            text:
-                'Need a Flutter expert to own your mobile app from idea to release',
+          _buildBullet(
+            'Want a Flutter expert from idea → Play Store launch',
+            context,
           ),
-          _Bullet(
-            text:
-                'Care about clean architecture, performance, and long-term maintainability',
+          _buildBullet(
+            'Care about clean code, performance & scalability',
+            context,
           ),
-          _Bullet(
-            text:
-                'Want clear communication, deadlines met, and honest technical feedback',
+          _buildBullet(
+            'Value clear deadlines & honest technical feedback',
+            context,
           ),
-          _Bullet(
-            text:
-                'Are ready to invest in a product that can generate serious revenue',
+          _buildBullet(
+            'Are ready to invest in a revenue-generating product',
+            context,
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
           Text(
-            'Contact methods',
-            style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+            'Get in touch',
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-          _ContactMethodTile(
+          _ContactTile(
             icon: Icons.email_rounded,
-            label: 'Email',
-            value: AppConstants.email,
-            description: 'Best for detailed project briefs & proposals',
+            title: 'Email (Recommended)',
+            value: 'sanaullah49@gmail.com',
             onTap: () => UrlLauncherUtils.launchEmail(
-              subject: 'Project Inquiry - Flutter App',
+              subject: 'Flutter Project – Let\'s Talk!',
             ),
           ),
           const SizedBox(height: 12),
-          _ContactMethodTile(
+          _ContactTile(
             icon: Icons.chat_rounded,
-            label: 'WhatsApp',
-            value: '+92-336-2451056',
-            description: 'Quick questions & time-sensitive communication',
+            title: 'WhatsApp',
+            value: '+92 336 2451056',
             onTap: () => UrlLauncherUtils.launchWhatsApp(
               message:
-                  'Hi Sana, I\'d like to discuss a Flutter project. Are you available?',
+                  'Hi Sana! I have a Flutter project I\'d love to discuss.',
             ),
           ),
           const SizedBox(height: 12),
-          _ContactMethodTile(
+          _ContactTile(
             icon: Icons.calendar_today_rounded,
-            label: 'Schedule a Call',
-            value: 'Book a 15-min discovery call',
-            description: 'Perfect for high-level idea validation',
+            title: 'Schedule a Call',
+            value: 'Book 15-min discovery call',
             onTap: () => UrlLauncherUtils.openCalendly(),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
-          Text(
-            'Or connect directly',
-            style: textTheme.labelMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+          const Text(
+            'Or reach me directly',
+            style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
         ],
       ),
     );
   }
-}
 
-class _Bullet extends StatelessWidget {
-  final String text;
-
-  const _Bullet({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-
+  Widget _buildBullet(String text, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 7),
+            margin: const EdgeInsets.only(top: 6),
             width: 7,
             height: 7,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.success,
-              borderRadius: BorderRadius.circular(3.5),
+              shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              style: TextStyle(
+                fontSize: 15,
                 height: 1.6,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ),
@@ -207,87 +212,76 @@ class _Bullet extends StatelessWidget {
   }
 }
 
-class _ContactMethodTile extends StatelessWidget {
+class _ContactTile extends StatelessWidget {
   final IconData icon;
-  final String label;
+  final String title;
   final String value;
-  final String description;
   final VoidCallback onTap;
 
-  const _ContactMethodTile({
+  const _ContactTile({
     required this.icon,
-    required this.label,
+    required this.title,
     required this.value,
-    required this.description,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final textTheme = context.textTheme;
     final isDark = context.isDarkMode;
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.darkBgTertiary : AppColors.lightBgSecondary,
-          borderRadius: BorderRadius.circular(14),
+          color: isDark
+              ? AppColors.darkBgTertiary
+              : AppColors.lightBgSecondary.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: colorScheme.outline.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.15),
             width: 1,
           ),
         ),
         child: Row(
           children: [
             Container(
-              width: 38,
-              height: 38,
+              width: 44,
+              height: 44,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                color: AppColors.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(icon, size: 20, color: AppColors.primary),
+              child: Icon(icon, color: AppColors.primary, size: 22),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    label,
-                    style: textTheme.labelMedium?.copyWith(
+                    title,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     value,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    description,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.8,
-                      ),
-                      fontSize: 11,
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
             Icon(
-              Icons.open_in_new_rounded,
+              Icons.arrow_forward_ios_rounded,
               size: 16,
-              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ],
         ),
