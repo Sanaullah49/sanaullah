@@ -5,11 +5,11 @@ class OpenSourceData {
   OpenSourceData._();
 
   static const GitHubStats githubStats = GitHubStats(
-    publicRepos: 25,
-    followers: 120,
-    following: 50,
-    totalStars: 85,
-    totalForks: 32,
+    publicRepos: 9,
+    followers: 2,
+    following: 6,
+    totalStars: 10,
+    totalForks: 3,
     contributions: 450,
     avatarUrl: 'https://github.com/sanaullah49.png',
     profileUrl: AppUrls.github,
@@ -17,15 +17,27 @@ class OpenSourceData {
 
   static final List<GitHubRepo> featuredRepos = [
     GitHubRepo(
+      name: 'arc_progress_ring',
+      description:
+          'A highly customizable circular progress indicator with milestone markers, glassmorphic effects, and smooth animations for Flutter.',
+      url: AppUrls.expenseTrackerRepo,
+      language: 'Dart',
+      stars: 3,
+      forks: 2,
+      watchers: 8,
+      updatedAt: DateTime(2026, 1, 8),
+      topics: ['flutter', 'package', 'widget', 'pub-dev'],
+    ),
+    GitHubRepo(
       name: 'expense_tracker',
       description:
           'Production-ready expense tracking app with multi-currency support, biometric auth, and export features.',
       url: AppUrls.expenseTrackerRepo,
       language: 'Dart',
-      stars: 45,
-      forks: 12,
+      stars: 7,
+      forks: 2,
       watchers: 8,
-      updatedAt: DateTime(2025, 1, 15),
+      updatedAt: DateTime(2025, 12, 27),
       topics: ['flutter', 'dart', 'finance', 'hive', 'provider'],
     ),
     GitHubRepo(
@@ -37,19 +49,19 @@ class OpenSourceData {
       stars: 28,
       forks: 8,
       watchers: 5,
-      updatedAt: DateTime(2025, 2, 1),
+      updatedAt: DateTime(2026, 1, 2),
       topics: ['flutter', 'package', 'widget', 'pub-dev'],
     ),
     GitHubRepo(
-      name: 'flutter_portfolio',
+      name: 'sanaullah',
       description:
           'My personal portfolio website built with Flutter Web, featuring responsive design and animations.',
-      url: 'https://github.com/sanaullah49/flutter_portfolio',
+      url: 'https://github.com/sanaullah49/sanaullah',
       language: 'Dart',
-      stars: 15,
-      forks: 5,
-      watchers: 3,
-      updatedAt: DateTime(2025, 2, 10),
+      stars: 3,
+      forks: 1,
+      watchers: 2,
+      updatedAt: DateTime.now(),
       topics: ['flutter', 'portfolio', 'web', 'responsive'],
     ),
   ];
@@ -59,13 +71,26 @@ class OpenSourceData {
       name: 'custom_ruler',
       description:
           'A customizable ruler widget for Flutter with support for horizontal and vertical orientations, custom styling, and smooth interactions.',
-      version: '1.0.2',
+      version: '1.0.0',
       url: AppUrls.customRulerPackage,
-      likes: 35,
-      pubPoints: 130,
-      popularity: 72,
+      likes: 7,
+      pubPoints: 160,
+      popularity: 144,
       platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
-      publishedAt: DateTime(2025, 1, 20),
+      publishedAt: DateTime(2025, 12, 28),
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'arc_progress_ring',
+      description:
+          'A customizable ruler widget for Flutter with support for horizontal and vertical orientations, custom styling, and smooth interactions.',
+      version: '1.0.1',
+      url: AppUrls.arcProgressRingPackage,
+      likes: 6,
+      pubPoints: 160,
+      popularity: 147,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      publishedAt: DateTime(2025, 1, 7),
       isVerified: true,
     ),
   ];

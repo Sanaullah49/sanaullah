@@ -17,6 +17,8 @@ class AppUrls {
       'https://pub.dev/publishers/thesanaullah.dev';
   static const String customRulerPackage =
       'https://pub.dev/packages/custom_ruler';
+  static const String arcProgressRingPackage =
+      'https://pub.dev/packages/arc_progress_ring';
   static const String expenseTrackerRepo =
       'https://github.com/sanaullah49/expense_tracker';
   static const String animeWallpaperApp =
