@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/theme_provider.dart';
-import '../../core/utils/responsive_utils.dart';
 import '../../core/utils/url_launcher_utils.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/secondary_button.dart';
@@ -10,327 +7,413 @@ import '../../core/widgets/social_button.dart';
 import '../home/widgets/contact_form.dart';
 import '../testimonials/widgets/testimonial_stats.dart';
 import 'data/pricing_data.dart';
-import 'widgets/pricing_card.dart';
+import 'models/pricing_model.dart';
 
 class HireMePage extends StatelessWidget {
   const HireMePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-    final horizontalPadding = context.horizontalPadding;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final horizontalPadding = isMobile ? 24.0 : 40.0;
 
     return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: isMobile ? 60 : 100,
-            ),
-            decoration: BoxDecoration(
-              gradient: context.isDarkMode
-                  ? const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF020617),
-                        Color(0xFF020617),
-                        Color(0xFF111827),
-                      ],
-                    )
-                  : const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFFE0EAFF), Color(0xFFF5F3FF)],
-                    ),
-            ),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1100),
-                child: isMobile
-                    ? _buildMobileHero(context)
-                    : _buildDesktopHero(context),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 40),
-
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: isMobile ? 40 : 60,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1100),
-              child: _buildPricingSection(context),
-            ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: isMobile ? 40 : 60,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 900),
-              child: const ContactForm(),
-            ),
-          ),
+          const SizedBox(height: 60),
+          _buildHeroSection(context),
+          const SizedBox(height: 80),
+          _buildPricingSection(context),
+          const SizedBox(height: 80),
+          _buildContactSection(context),
+          const SizedBox(height: 60),
         ],
       ),
     );
   }
 
-  Widget _buildDesktopHero(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
+  Widget _buildHeroSection(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
 
+    if (isMobile) {
+      return Column(
+        children: [
+          Text(
+            'Hire Me',
+            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Flutter Developer\nfor your next project',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                _buildFeatureItem(
+                  context,
+                  Icons.rocket_launch,
+                  'Fast Development',
+                  'Ship quality apps quickly',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureItem(
+                  context,
+                  Icons.code,
+                  'Clean Code',
+                  'Maintainable and scalable',
+                ),
+                const SizedBox(height: 16),
+                _buildFeatureItem(
+                  context,
+                  Icons.support_agent,
+                  'Full Support',
+                  'From idea to deployment',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 32),
+          PrimaryButton(
+            text: 'Get Started',
+            icon: Icons.arrow_forward,
+            onPressed: () => UrlLauncherUtils.openCalendly(),
+            fullWidth: true,
+          ),
+          const SizedBox(height: 16),
+          SecondaryButton(
+            text: 'View Portfolio',
+            icon: Icons.work,
+            onPressed: () {},
+            fullWidth: true,
+          ),
+          const SizedBox(height: 32),
+          const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
+        ],
+      );
+    }
+
+    // Desktop/Tablet
+    return Column(
+      children: [
+        Text(
+          'Hire Me',
+          style: Theme.of(context).textTheme.displayLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Expert Flutter Developer ready to build\nyour next amazing application',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 40),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFeatureItem(
+                      context,
+                      Icons.rocket_launch,
+                      'Fast Development',
+                      'Ship quality apps quickly with modern practices',
+                    ),
+                    const SizedBox(height: 24),
+                    _buildFeatureItem(
+                      context,
+                      Icons.code,
+                      'Clean Code',
+                      'Maintainable architecture that scales',
+                    ),
+                    const SizedBox(height: 24),
+                    _buildFeatureItem(
+                      context,
+                      Icons.support_agent,
+                      'Full Support',
+                      'End-to-end development services',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 40),
+            Expanded(
+              child: Column(
+                children: [
+                  PrimaryButton(
+                    text: 'Schedule a Call',
+                    icon: Icons.calendar_today,
+                    onPressed: () => UrlLauncherUtils.openCalendly(),
+                    fullWidth: true,
+                    height: 56,
+                  ),
+                  const SizedBox(height: 16),
+                  SecondaryButton(
+                    text: 'Send Message',
+                    icon: Icons.email,
+                    onPressed: () => UrlLauncherUtils.launchEmail(
+                      subject: 'Hire Me Inquiry',
+                    ),
+                    fullWidth: true,
+                    height: 56,
+                  ),
+                  const SizedBox(height: 24),
+                  const TestimonialStatsInline(),
+                  const SizedBox(height: 24),
+                  const SocialButtonRow(
+                    showEmail: true,
+                    showBuyMeACoffee: true,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureItem(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String description,
+  ) {
     return Row(
       children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 24,
+          ),
+        ),
+        const SizedBox(width: 16),
         Expanded(
-          flex: 6,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hire a Flutter Developer\nwho thinks like a founder',
-                style: textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+                title,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 4),
               Text(
-                "I don’t just write code. I help you design, build, and ship mobile products\nthat people actually use — and that can make you serious money.",
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  height: 1.6,
+                description,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 24),
-              const TestimonialStatsInline(),
-              const SizedBox(height: 24),
-              Wrap(
-                spacing: 16,
-                runSpacing: 12,
-                children: [
-                  PrimaryButton(
-                    text: 'Book a Free 15‑min Call',
-                    icon: Icons.calendar_today_rounded,
-                    onPressed: () => UrlLauncherUtils.openCalendly(),
-                  ),
-                  SecondaryButton(
-                    text: 'Email Me Your Idea',
-                    icon: Icons.email_rounded,
-                    onPressed: () => UrlLauncherUtils.launchEmail(
-                      subject: 'Project Idea - Flutter App',
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
             ],
           ),
         ),
-
-        const SizedBox(width: 60),
-
-        Expanded(flex: 4, child: _buildHeroHighlights(context)),
       ],
-    );
-  }
-
-  Widget _buildMobileHero(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Hire a Flutter Developer\nwho thinks like a founder',
-          style: textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          "I help you design, build, and ship Flutter apps that users love\nand that can generate real revenue.",
-          style: textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onSurfaceVariant,
-            height: 1.6,
-          ),
-        ),
-        const SizedBox(height: 24),
-        const TestimonialStatsInline(),
-        const SizedBox(height: 24),
-        PrimaryButton(
-          text: 'Book a Free 15‑min Call',
-          icon: Icons.calendar_today_rounded,
-          fullWidth: true,
-          onPressed: () => UrlLauncherUtils.openCalendly(),
-        ),
-        const SizedBox(height: 12),
-        SecondaryButton(
-          text: 'Email Me Your Idea',
-          icon: Icons.email_rounded,
-          fullWidth: true,
-          onPressed: () => UrlLauncherUtils.launchEmail(
-            subject: 'Project Idea - Flutter App',
-          ),
-        ),
-        const SizedBox(height: 24),
-        _buildHeroHighlights(context),
-        const SizedBox(height: 24),
-        const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
-      ],
-    );
-  }
-
-  Widget _buildHeroHighlights(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
-
-    final items = [
-      _HighlightItem(
-        icon: Icons.rocket_launch_rounded,
-        title: 'Outcome‑driven development',
-        description:
-            'We start from your business goals and design the app around outcomes—not just features.',
-      ),
-      _HighlightItem(
-        icon: Icons.architecture_rounded,
-        title: 'Clean, scalable architecture',
-        description:
-            'SOLID, Clean Architecture, and best practices so your app can grow without turning into a mess.',
-      ),
-      _HighlightItem(
-        icon: Icons.bolt_rounded,
-        title: 'Speed without chaos',
-        description:
-            'You get fast delivery without sacrificing code quality, stability, or long‑term maintainability.',
-      ),
-    ];
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: context.isDarkMode ? AppColors.darkCard : AppColors.lightCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.1),
-          width: 1.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: items.map((item) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(item.icon, size: 20, color: AppColors.primary),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        style: textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        item.description,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
     );
   }
 
   Widget _buildPricingSection(BuildContext context) {
-    final isMobile = context.isMobile;
-    final plans = PricingData.plans;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
 
     return Column(
       children: [
         Text(
-          'Choose how we work together',
-          style: context.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-          textAlign: TextAlign.center,
+          'Simple Pricing',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
-          'Pricing ranges are realistic based on scope. Once I understand your project, you’ll get a clear, fixed quote.',
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
+          'Choose the plan that fits your needs',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 48),
+        if (isMobile)
+          ...PricingData.plans.map(
+            (plan) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _SimplePricingCard(plan: plan),
+            ),
+          )
+        else
+          Row(
+            children: PricingData.plans
+                .map(
+                  (plan) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 24),
+                      child: _SimplePricingCard(plan: plan),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildContactSection(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Let\'s Talk About Your Project',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Ready to get started? Fill out the form below and I\'ll get back to you within 24 hours.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 32),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            if (isMobile || constraints.maxWidth < 900) {
-              return Column(
-                children: [
-                  for (final plan in plans) ...[
-                    PricingCard(plan: plan),
-                    const SizedBox(height: 24),
-                  ],
-                ],
-              );
-            }
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: PricingCard(plan: plans[0])),
-                const SizedBox(width: 24),
-                Expanded(child: PricingCard(plan: plans[1])),
-                const SizedBox(width: 24),
-                Expanded(child: PricingCard(plan: plans[2])),
-              ],
-            );
-          },
-        ),
+        const SizedBox(height: 40),
+        const ContactForm(),
       ],
     );
   }
 }
 
-class _HighlightItem {
-  final IconData icon;
-  final String title;
-  final String description;
+class _SimplePricingCard extends StatelessWidget {
+  final PricingPlan plan;
 
-  const _HighlightItem({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
+  const _SimplePricingCard({required this.plan});
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
+    return Container(
+      padding: EdgeInsets.all(isMobile ? 24 : 32),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(16),
+        border: plan.isPopular
+            ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2)
+            : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  plan.name,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              if (plan.isPopular)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'POPULAR',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            plan.subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            plan.priceRange,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          if (plan.billing.isNotEmpty) ...[
+            Text(
+              plan.billing,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          const SizedBox(height: 24),
+          ...plan.features
+              .take(4)
+              .map(
+                (feature) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle, size: 20, color: Colors.green),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          feature,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          const SizedBox(height: 24),
+          PrimaryButton(
+            text: plan.isCustom ? 'Contact Me' : 'Get Started',
+            onPressed: () => UrlLauncherUtils.openCalendly(),
+            fullWidth: true,
+          ),
+        ],
+      ),
+    );
+  }
 }

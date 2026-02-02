@@ -90,8 +90,11 @@ Thanks,
             ),
           ],
         ),
-        transform: Matrix4.identity()
-          ..translate(0.0, _isHovered || plan.isPopular ? -6.0 : 0.0),
+        transform: Matrix4.translationValues(
+          0.0,
+          _isHovered || plan.isPopular ? -6.0 : 0.0,
+          0.0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
