@@ -33,3 +33,8 @@ jobs:
           local-dir: build/web/
           server-dir: ./
           dangerous-clean-slate: false
+          exclude: |
+            **/.git/**
+            **/.github/**
+            **/assets/assets/**
+
