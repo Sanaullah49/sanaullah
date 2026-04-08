@@ -60,10 +60,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
     - assets/icons/
-    - assets/mockups/
-    - assets/blog/
     - assets/lottie/
 
   fonts:

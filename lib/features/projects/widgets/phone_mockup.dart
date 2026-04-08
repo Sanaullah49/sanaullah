@@ -7,6 +7,8 @@ class PhoneMockup extends StatelessWidget {
   final String imagePath;
   final Color accentColor;
   final bool isHovered;
+  final String? title;
+  final String? eyebrow;
   final double? width;
   final double? height;
 
@@ -15,6 +17,8 @@ class PhoneMockup extends StatelessWidget {
     required this.imagePath,
     this.accentColor = AppColors.primary,
     this.isHovered = false,
+    this.title,
+    this.eyebrow,
     this.width,
     this.height,
   });
@@ -157,25 +161,50 @@ class PhoneMockup extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.phone_android_rounded,
-            size: mockupWidth * 0.25,
-            color: Colors.white.withValues(alpha: 0.9),
+          if (eyebrow != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                eyebrow!,
+                style: TextStyle(
+                  fontSize: mockupWidth * 0.045,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withValues(alpha: 0.95),
+                ),
+              ),
+            ),
+            SizedBox(height: mockupWidth * 0.08),
+          ],
+          Text(
+            title ?? 'App Preview',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: mockupWidth * 0.1,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              height: 1.1,
+            ),
           ),
-          SizedBox(height: mockupWidth * 0.06),
+          SizedBox(height: mockupWidth * 0.08),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            width: mockupWidth * 0.52,
+            height: mockupWidth * 0.06,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.28),
+              borderRadius: BorderRadius.circular(999),
+            ),
+          ),
+          SizedBox(height: mockupWidth * 0.04),
+          Container(
+            width: mockupWidth * 0.36,
+            height: mockupWidth * 0.06,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              'Preview',
-              style: TextStyle(
-                fontSize: mockupWidth * 0.06,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.9),
-              ),
+              borderRadius: BorderRadius.circular(999),
             ),
           ),
         ],
@@ -188,12 +217,16 @@ class PhoneMockupLarge extends StatefulWidget {
   final String imagePath;
   final Color accentColor;
   final List<String>? screenshots;
+  final String? title;
+  final String? eyebrow;
 
   const PhoneMockupLarge({
     super.key,
     required this.imagePath,
     this.accentColor = AppColors.primary,
     this.screenshots,
+    this.title,
+    this.eyebrow,
   });
 
   @override
@@ -344,18 +377,49 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.phone_android_rounded,
-            size: 80,
-            color: Colors.white.withValues(alpha: 0.9),
-          ),
-          const SizedBox(height: 16),
+          if (widget.eyebrow != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                widget.eyebrow!,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withValues(alpha: 0.95),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+          ],
           Text(
-            'App Preview',
+            widget.title ?? 'App Preview',
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.9),
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 22),
+          Container(
+            width: 150,
+            height: 10,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.24),
+              borderRadius: BorderRadius.circular(999),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: 110,
+            height: 10,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(999),
             ),
           ),
         ],

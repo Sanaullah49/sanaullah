@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
-import '../../../core/utils/responsive_utils.dart';
 import '../../../core/utils/url_launcher_utils.dart';
 import '../../../core/widgets/section_title.dart';
 import '../../../core/widgets/section_wrapper.dart';
-import '../../../core/widgets/social_button.dart';
-import '../../testimonials/widgets/testimonial_stats.dart';
+import '../../../core/widgets/status_badge.dart';
 import '../widgets/contact_form.dart';
 
 class ContactSection extends StatelessWidget {
@@ -16,62 +14,41 @@ class ContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
+    final isMobile = MediaQuery.of(context).size.width < 1000;
 
-    return VisibilityDetector(
-      key: const Key('contact-section'),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.3) {}
-      },
-      child: SectionWrapper(
-        sectionId: 'contact',
-        backgroundColor: context.isDarkMode
-            ? AppColors.darkBgSecondary
-            : AppColors.lightBgSecondary,
-        child: Column(
-          children: [
-            SectionTitle(
-              tag: 'CONTACT',
-              title: "Let's Build Something Great",
-              subtitle:
-                  "Serious about a high-impact Flutter app? Drop your idea below – I reply within 12–24 hours.",
-              centerAlign: true,
+    return SectionWrapper(
+      sectionId: 'contact',
+      backgroundColor: context.isDarkMode
+          ? AppColors.darkBgSecondary
+          : AppColors.lightBgSecondary,
+      child: Column(
+        children: [
+          const SectionTitle(
+            tag: 'CONTACT',
+            title: "Let's talk about the product, not just the stack",
+            subtitle:
+                "If you need help launching, stabilizing, or leveling up a Flutter app, send the brief and I'll reply with a grounded next step.",
+            centerAlign: true,
+          ),
+          const SizedBox(height: 48),
+          if (isMobile)
+            const Column(
+              children: [
+                _ContactInfoCard(),
+                SizedBox(height: 28),
+                ContactForm(),
+              ],
+            )
+          else
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 5, child: _ContactInfoCard()),
+                SizedBox(width: 40),
+                Expanded(flex: 6, child: ContactForm()),
+              ],
             ),
-
-            const SizedBox(height: 32),
-
-            const TestimonialStatsInline(),
-
-            const SizedBox(height: 48),
-
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final bool useColumn = isMobile || constraints.maxWidth < 1000;
-
-                if (useColumn) {
-                  return const Column(
-                    children: [
-                      _ContactInfoCard(),
-                      SizedBox(height: 32),
-                      ContactForm(),
-                    ],
-                  );
-                }
-
-                return const Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 5, child: _ContactInfoCard()),
-                    SizedBox(width: 48),
-                    Expanded(flex: 6, child: ContactForm()),
-                  ],
-                );
-              },
-            ),
-
-            const SizedBox(height: 40),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -85,8 +62,7 @@ class _ContactInfoCard extends StatelessWidget {
     final isDark = context.isDarkMode;
     final colorScheme = context.colorScheme;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+    return Container(
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkCard : AppColors.lightCard,
@@ -106,75 +82,88 @@ class _ContactInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const StatusBadge(text: 'Usually replies within 12-24 hours'),
+          const SizedBox(height: 22),
           Text(
-            'Perfect if you...',
+            'Best fit if you need help with...',
             style: Theme.of(
               context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
-
           _buildBullet(
-            'Want a Flutter expert from idea → Play Store launch',
+            'Shipping a new Flutter product from zero to release',
             context,
           ),
           _buildBullet(
-            'Care about clean code, performance & scalability',
+            'Stabilizing an existing app with better structure and polish',
             context,
           ),
           _buildBullet(
-            'Value clear deadlines & honest technical feedback',
+            'Building product features that need careful UX and performance',
             context,
           ),
           _buildBullet(
-            'Are ready to invest in a revenue-generating product',
+            'Working with someone who communicates clearly and flags risks early',
             context,
           ),
-
-          const SizedBox(height: 32),
-
-          Text(
-            'Get in touch',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 16),
-
-          _ContactTile(
-            icon: Icons.email_rounded,
-            title: 'Email (Recommended)',
-            value: 'sanaullah49@gmail.com',
-            onTap: () => UrlLauncherUtils.launchEmail(
-              subject: 'Flutter Project – Let\'s Talk!',
+          const SizedBox(height: 28),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppColors.darkBgTertiary
+                  : AppColors.lightBgSecondary.withValues(alpha: 0.65),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: colorScheme.outline.withValues(alpha: 0.12),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Direct contact',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                _ContactTile(
+                  icon: Icons.email_rounded,
+                  title: 'Email',
+                  value: AppConstants.email,
+                  onTap: () => UrlLauncherUtils.launchEmail(
+                    subject: 'Flutter Project Inquiry',
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _ContactTile(
+                  icon: Icons.chat_rounded,
+                  title: 'WhatsApp',
+                  value: AppConstants.phone,
+                  onTap: () => UrlLauncherUtils.launchWhatsApp(
+                    message:
+                        'Hi Sana! I have a Flutter project I would like to discuss.',
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _ContactTile(
+                  icon: Icons.calendar_today_rounded,
+                  title: 'Discovery Call',
+                  value: 'Book a short intro call',
+                  onTap: () => UrlLauncherUtils.openCalendly(),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 22),
           _ContactTile(
-            icon: Icons.chat_rounded,
-            title: 'WhatsApp',
-            value: '+92 336 2451056',
-            onTap: () => UrlLauncherUtils.launchWhatsApp(
-              message:
-                  'Hi Sana! I have a Flutter project I\'d love to discuss.',
-            ),
+            icon: Icons.location_on_rounded,
+            title: 'Based in',
+            value: AppConstants.location,
           ),
-          const SizedBox(height: 12),
-          _ContactTile(
-            icon: Icons.calendar_today_rounded,
-            title: 'Schedule a Call',
-            value: 'Book 15-min discovery call',
-            onTap: () => UrlLauncherUtils.openCalendly(),
-          ),
-
-          const SizedBox(height: 32),
-
-          const Text(
-            'Or reach me directly',
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 16),
-          const SocialButtonRow(showEmail: true, showBuyMeACoffee: true),
         ],
       ),
     );
@@ -216,13 +205,13 @@ class _ContactTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String value;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _ContactTile({
     required this.icon,
     required this.title,
     required this.value,
-    required this.onTap,
+    this.onTap,
   });
 
   @override
@@ -271,18 +260,21 @@ class _ContactTile extends StatelessWidget {
                   Text(
                     value,
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: onTap != null
+                          ? AppColors.primary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+            if (onTap != null)
+              Icon(
+                Icons.arrow_outward_rounded,
+                size: 18,
+                color: AppColors.primary.withValues(alpha: 0.7),
+              ),
           ],
         ),
       ),

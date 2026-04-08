@@ -15,10 +15,10 @@ class ExperienceData {
       endDate: null,
       description:
           'Leading mobile development initiatives for healthcare applications, '
-          'focusing on medical device integration and real-time health monitoring solutions.',
+          'focusing on medical device integration and real-time device data workflows.',
       responsibilities: [
         'Building serial communication apps for medical devices',
-        'Developing health monitoring apps using Flutter and native Android',
+        'Developing Flutter and native Android flows around medical device data collection',
         'Implementing clean architecture and SOLID principles',
         'Mentoring junior developers and conducting code reviews',
       ],
@@ -57,7 +57,7 @@ class ExperienceData {
         'Managing client relationships and project deliverables',
       ],
       achievements: [
-        'Published 10+ apps on Play Store with strong user ratings',
+        'Published multiple apps on Play Store with strong user ratings',
         'Reduced app load time by 40% through optimized state management',
         'Increased revenue by 25% through strategic ad integration',
         'Maintained 100% client satisfaction rate across 5 international clients',
@@ -82,16 +82,16 @@ class ExperienceData {
       startDate: DateTime(2023, 3),
       endDate: DateTime(2023, 6),
       description:
-          'Developed a comprehensive restaurant POS application with offline-first '
+          'Developed a comprehensive restaurant ordering application with offline-first '
           'architecture, payment integration, and intuitive Material Design UI.',
       responsibilities: [
-        'Building Izzana Restaurant POS app from scratch',
+        'Building Izzana restaurant ordering app from scratch',
         'Implementing offline-first architecture with real-time sync',
         'Integrating Stripe payments and Firebase notifications',
         'Creating intuitive UI/UX following Material Design guidelines',
       ],
       achievements: [
-        'Delivered fully functional POS system used by restaurants',
+        'Delivered fully functional restaurant ordering system used by restaurant teams',
         'Achieved 4.5+ star rating through intuitive UI/UX design',
         'Successfully integrated Stripe payment processing',
         'Implemented robust offline-first data sync mechanism',

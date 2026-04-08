@@ -7,6 +7,7 @@ import '../features/blog/presentation/blog_detail_page.dart';
 import '../features/blog/presentation/blog_list_page.dart';
 import '../features/hire_me/hire_me_page.dart';
 import '../features/home/home_page.dart';
+import '../features/open_source/presentation/open_source_page.dart';
 import '../features/projects/presentation/project_detail_page.dart';
 import '../features/projects/presentation/projects_page.dart';
 import '../shared/layouts/main_layout.dart';
@@ -78,6 +79,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
 
           GoRoute(
+            path: RouteNames.openSource,
+            name: 'open-source',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const OpenSourcePage(),
+              transitionsBuilder: PageTransitions.slideLeftTransition,
+            ),
+          ),
+
+          GoRoute(
             path: RouteNames.blog,
             name: 'blog',
             pageBuilder: (context, state) => CustomTransitionPage(
@@ -128,6 +139,8 @@ extension GoRouterExtension on BuildContext {
   void goAbout() => go(RouteNames.about);
 
   void goProjects() => go(RouteNames.projects);
+
+  void goOpenSource() => go(RouteNames.openSource);
 
   void goProjectDetail(String slug) => go('${RouteNames.projects}/$slug');
 

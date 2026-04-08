@@ -48,50 +48,57 @@ class _StatusBadgeState extends State<StatusBadge>
   @override
   Widget build(BuildContext context) {
     final color = widget.isAvailable ? AppColors.success : AppColors.warning;
+    final isCompact = MediaQuery.of(context).size.width < 380;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(
+        horizontal: isCompact ? 12 : 16,
+        vertical: isCompact ? 8 : 10,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedBuilder(
-            animation: _pulseAnimation,
-            builder: (context, child) {
-              return Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(
-                        alpha: _pulseAnimation.value * 0.5,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedBuilder(
+              animation: _pulseAnimation,
+              builder: (context, child) {
+                return Container(
+                  width: isCompact ? 8 : 10,
+                  height: isCompact ? 8 : 10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(
+                          alpha: _pulseAnimation.value * 0.5,
+                        ),
+                        blurRadius: 8,
+                        spreadRadius: 2,
                       ),
-                      blurRadius: 8,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 10),
-          Text(
-            widget.text,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: color,
-              letterSpacing: 0.3,
+                    ],
+                  ),
+                );
+              },
             ),
-          ),
-        ],
+            SizedBox(width: isCompact ? 8 : 10),
+            Text(
+              widget.text,
+              style: TextStyle(
+                fontSize: isCompact ? 13 : 14,
+                fontWeight: FontWeight.w600,
+                color: color,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -183,6 +183,8 @@ class _ProjectCardState extends State<ProjectCard>
                     imagePath: project.mockupImage,
                     accentColor: project.accentColor,
                     isHovered: _isHovered,
+                    title: project.title,
+                    eyebrow: project.category.label,
                   ),
                 );
               },

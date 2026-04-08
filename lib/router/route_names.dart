@@ -4,6 +4,7 @@ class RouteNames {
   static const String home = '/';
   static const String about = '/about';
   static const String projects = '/projects';
+  static const String openSource = '/open-source';
   static const String blog = '/blog';
   static const String hireMe = '/hire-me';
   static const String contact = '/contact';
@@ -32,6 +33,7 @@ class RouteNames {
     if (path == home) return 'Home';
     if (path == about) return 'About';
     if (path.startsWith(projects)) return 'Projects';
+    if (path == openSource) return 'Open Source';
     if (path.startsWith(blog)) return 'Blog';
     if (path == hireMe || path == contact) return 'Hire Me';
     return 'Page';

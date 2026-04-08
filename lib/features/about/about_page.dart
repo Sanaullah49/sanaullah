@@ -139,7 +139,7 @@ class AboutPage extends StatelessWidget {
             InfoCard(
               icon: Icons.cake_rounded,
               label: 'Born',
-              value: 'January 1999',
+              value: 'September 2000',
               color: AppColors.secondary,
             ),
             InfoCard(

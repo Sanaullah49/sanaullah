@@ -1,11 +1,13 @@
 import '../../../core/constants/app_urls.dart';
+import '../../../core/theme/app_colors.dart';
 import '../models/github_models.dart';
 
 class OpenSourceData {
   OpenSourceData._();
 
   static const GitHubStats githubStats = GitHubStats(
-    publicRepos: 9,
+    publicRepos: 20,
+    privateRepos: 130,
     followers: 2,
     following: 6,
     totalStars: 10,
@@ -68,30 +70,204 @@ class OpenSourceData {
 
   static final List<PubDevPackage> packages = [
     PubDevPackage(
-      name: 'custom_ruler',
+      name: 'flutter_wallpaper_plus',
       description:
-          'A customizable ruler widget for Flutter with support for horizontal and vertical orientations, custom styling, and smooth interactions.',
-      version: '1.0.0',
-      url: AppUrls.customRulerPackage,
-      likes: 7,
-      pubPoints: 160,
-      popularity: 144,
-      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
-      publishedAt: DateTime(2025, 12, 28),
+          'Flutter plugin to set both home screen and lock screen wallpaper with support for crop, scale, and native gallery saving.',
+      version: '1.1.1',
+      url: AppUrls.flutterWallpaperPlusPackage,
+      likes: 0,
+      pubPoints: 130,
+      downloads: 42,
+      platforms: const ['Android'],
       isVerified: true,
     ),
     PubDevPackage(
       name: 'arc_progress_ring',
       description:
-          'A customizable ruler widget for Flutter with support for horizontal and vertical orientations, custom styling, and smooth interactions.',
+          'A sleek and customizable Flutter widget for rendering animated circular progress rings with support for milestones, gradients, glass effects, and center content.',
       version: '1.0.1',
       url: AppUrls.arcProgressRingPackage,
-      likes: 6,
+      likes: 0,
       pubPoints: 160,
-      popularity: 147,
-      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
-      publishedAt: DateTime(2025, 1, 7),
+      downloads: 17,
+      platforms: const ['Android', 'iOS', 'Linux', 'macOS', 'Web', 'Windows'],
       isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'custom_ruler',
+      description:
+          'A highly customizable Flutter package for creating ruler widgets with horizontal and vertical orientations, custom styling, and smooth interactions.',
+      version: '1.0.0',
+      url: AppUrls.customRulerPackage,
+      likes: 0,
+      pubPoints: 160,
+      downloads: 49,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'ai_kit',
+      description:
+          'A Flutter package for building modern assistant chat interfaces with streaming, conversation state, message models, and plug-and-play widgets.',
+      version: '0.1.0',
+      url: AppUrls.aiKitPackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: 7,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'goal_progress_indicator',
+      description:
+          'A highly customizable Flutter package for visualizing goal progress with multiple built-in styles, animated transitions, and threshold markers.',
+      version: '1.0.0',
+      url: AppUrls.goalProgressIndicatorPackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: 9,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'magic_responsive',
+      description:
+          'A lightweight, zero-configuration Flutter package for truly responsive UIs across phones, tablets, desktops, and ultra-wide screens.',
+      version: '0.0.1',
+      url: AppUrls.magicResponsivePackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: 7,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'flutter_build_doctor',
+      description:
+          'A Flutter tool that scans your project and automatically detects common build issues, misconfigurations, and plugin mismatches with actionable suggestions.',
+      version: '0.1.0',
+      url: AppUrls.flutterBuildDoctorPackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: 7,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'flutter_lifecycle_guard',
+      description:
+          'Effortlessly manage app lifecycle states in Flutter with prebuilt handlers, intuitive state utilities, and minimal setup.',
+      version: '1.0.0-dev.1',
+      url: AppUrls.flutterLifecycleGuardPackage,
+      likes: 0,
+      pubPoints: 140,
+      downloads: 4,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'vidkit',
+      description:
+          'VidKit is a Flutter package for embedding branded short-form video reels with smooth playback, engagement callbacks, and an extensible UI layer.',
+      version: '0.1.1',
+      url: AppUrls.vidkitPackage,
+      likes: 0,
+      pubPoints: 130,
+      downloads: 44,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'webify_toolkit',
+      description:
+          'Webify Toolkit helps you turn existing Flutter widgets into polished web-ready sections with responsive wrappers, SEO helpers, and styling utilities.',
+      version: '0.1.0',
+      url: AppUrls.webifyToolkitPackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: 4,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'hyper_table',
+      description:
+          'High-performance Flutter data grid with virtual scrolling, frozen columns, sorting, filtering, editing, tree data, and synchronized section scrolling.',
+      version: '0.1.0',
+      url: AppUrls.hyperTablePackage,
+      likes: 0,
+      pubPoints: 160,
+      downloads: 27,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+    PubDevPackage(
+      name: 'auto_theme',
+      description:
+          'Automatically generate the opposite Flutter theme from the one you already designed.',
+      version: '0.1.1',
+      url: AppUrls.autoThemePackage,
+      likes: 0,
+      pubPoints: 150,
+      downloads: null,
+      platforms: const ['Android', 'iOS', 'Web', 'macOS', 'Windows', 'Linux'],
+      isVerified: true,
+    ),
+  ];
+
+  static final List<OpenSourceContribution> selectedContributions = [
+    OpenSourceContribution(
+      reference: '#184193',
+      title: 'Removed a cross-import from sliver_app_bar_test',
+      summary:
+          'Cleaned up Flutter framework tests by removing the sliver_test_utils cross-import and inlining the small geometry helper directly into the test.',
+      repository: 'flutter/flutter',
+      url: AppUrls.flutterFrameworkPr,
+      dateLabel: 'Merged Apr 1, 2026',
+      area: 'Framework tests',
+      status: ContributionStatus.merged,
+      tags: ['framework', 'material', 'scrolling'],
+      accentColor: AppColors.primary,
+    ),
+    OpenSourceContribution(
+      reference: '#184651',
+      title:
+          'Removed feedback_tester cross-import from checkbox_list_tile_test',
+      summary:
+          'Simplified another Flutter framework test by inlining the small feedback tester helper and removing the cross-import dependency.',
+      repository: 'flutter/flutter',
+      url: AppUrls.flutterCheckboxListTilePr,
+      dateLabel: 'Recent PR · Apr 6, 2026',
+      area: 'Framework tests',
+      status: ContributionStatus.recent,
+      tags: ['framework', 'material', 'test cleanup'],
+      accentColor: AppColors.accent,
+    ),
+    OpenSourceContribution(
+      reference: '#184192',
+      title: 'Disabled web hot reload when flutter run uses --no-hot',
+      summary:
+          'Updated flutter_tools so the --no-hot flag correctly disables web hot reload, with regression coverage for both command handling and the resident web runner.',
+      repository: 'flutter/flutter',
+      url: AppUrls.flutterNoHotPr,
+      dateLabel: 'Recent PR · Mar 26, 2026',
+      area: 'Flutter tool',
+      status: ContributionStatus.recent,
+      tags: ['tool', 'web', 'regression tests'],
+      accentColor: AppColors.secondary,
+    ),
+    OpenSourceContribution(
+      reference: '#184189',
+      title: 'Preserved multiple Set-Cookie headers in the web proxy',
+      summary:
+          'Fixed Flutter web proxy behavior so multiple Set-Cookie headers are preserved correctly, backed by an end-to-end regression test.',
+      repository: 'flutter/flutter',
+      url: AppUrls.flutterSetCookiePr,
+      dateLabel: 'Recent PR · Mar 26, 2026',
+      area: 'Web tooling',
+      status: ContributionStatus.recent,
+      tags: ['tool', 'web proxy', 'networking'],
+      accentColor: AppColors.info,
     ),
   ];
 

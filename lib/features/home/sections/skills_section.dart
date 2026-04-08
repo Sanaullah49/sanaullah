@@ -1,319 +1,274 @@
 import 'package:flutter/material.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
-import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/section_title.dart';
 import '../../../core/widgets/section_wrapper.dart';
 import '../models/skill_model.dart';
-import '../widgets/skill_bar.dart';
-import '../widgets/skill_card.dart';
 import '../widgets/tech_stack_grid.dart';
 
-class SkillsSection extends StatefulWidget {
+class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
   @override
-  State<SkillsSection> createState() => _SkillsSectionState();
-}
-
-class _SkillsSectionState extends State<SkillsSection> {
-  bool _isVisible = false;
-
-  @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isDark = context.isDarkMode;
+    final featuredTech = TechStackData.allTechnologies.where((tech) {
+      const names = {
+        'Flutter',
+        'Dart',
+        'Firebase',
+        'REST API',
+        'Bloc',
+        'Riverpod',
+        'SQLite',
+        'Hive',
+        'Git',
+        'Figma',
+        'Android',
+        'iOS',
+      };
 
-    return VisibilityDetector(
-      key: const Key('skills-section'),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.2 && !_isVisible) {
-          setState(() => _isVisible = true);
-        }
-      },
-      child: Container(
-        color: isDark ? AppColors.darkBgSecondary : AppColors.lightBgSecondary,
-        child: SectionWrapper(
-          sectionId: 'skills',
-          backgroundColor: Colors.transparent,
-          child: Column(
-            children: [
-              const SectionTitle(
-                tag: 'MY SKILLS',
-                title: 'Technologies & Tools',
-                subtitle:
-                    'The tech stack I use to bring ideas to life and deliver exceptional results',
-              ),
+      return names.contains(tech.name);
+    }).toList();
 
-              SizedBox(height: isMobile ? 48 : 80),
-
-              _buildSkillCategories(context),
-
-              SizedBox(height: isMobile ? 48 : 80),
-
-              _buildTechStackSection(context),
-
-              SizedBox(height: isMobile ? 48 : 80),
-
-              _buildProficiencySection(context),
-            ],
-          ),
-        ),
+    const pillars = [
+      _SkillPillarData(
+        title: 'Flutter Delivery',
+        description:
+            'Cross-platform product work with the polish needed for real releases, not just prototypes.',
+        color: AppColors.primary,
+        icon: Icons.phone_iphone_rounded,
+        bullets: [
+          'Responsive UI implementation',
+          'Play Store and App Store shipping',
+          'Performance tuning on real devices',
+        ],
       ),
-    );
-  }
-
-  Widget _buildSkillCategories(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
-
-    final categories = [
-      SkillCategory(
-        title: 'Mobile Development',
-        icon: Icons.phone_android_rounded,
-        color: AppColors.flutter,
-        skills: ['Flutter', 'Dart', 'Android (Java/Kotlin)', 'iOS (Swift)'],
-        description: 'Building native-quality cross-platform mobile apps',
-      ),
-      SkillCategory(
-        title: 'State Management',
-        icon: Icons.account_tree_rounded,
+      _SkillPillarData(
+        title: 'Architecture',
+        description:
+            'Codebases structured for iteration, debugging, and handoff as products grow.',
         color: AppColors.accent,
-        skills: ['Provider', 'Bloc/Cubit', 'GetX', 'Riverpod'],
-        description: 'Efficient state management for scalable apps',
+        icon: Icons.account_tree_rounded,
+        bullets: [
+          'Bloc, Riverpod, Provider',
+          'Feature-based organization',
+          'Readable state and data flow',
+        ],
       ),
-      SkillCategory(
-        title: 'Backend & Database',
-        icon: Icons.storage_rounded,
-        color: AppColors.firebase,
-        skills: ['Firebase', 'REST APIs', 'SQLite', 'Hive', 'Isar'],
-        description: 'Seamless data management and API integration',
-      ),
-      SkillCategory(
-        title: 'Tools & Workflow',
-        icon: Icons.build_rounded,
-        color: AppColors.success,
-        skills: ['Git/GitHub', 'VS Code', 'Android Studio', 'Figma', 'Postman'],
-        description: 'Professional development workflow and collaboration',
+      _SkillPillarData(
+        title: 'Integration Work',
+        description:
+            'Comfortable across APIs, storage, Firebase, and the practical details around shipping mobile products.',
+        color: AppColors.secondary,
+        icon: Icons.cloud_sync_rounded,
+        bullets: [
+          'REST APIs and Firebase',
+          'Offline storage and sync',
+          'Tooling, version control, and QA',
+        ],
       ),
     ];
 
-    if (isMobile) {
-      return Column(
-        children: categories.map((category) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: _buildAnimatedCard(category, categories.indexOf(category)),
-          );
-        }).toList(),
-      );
-    }
-
-    if (isTablet) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return SectionWrapper(
+      sectionId: 'skills',
+      backgroundColor: context.isDarkMode
+          ? AppColors.darkBgSecondary.withValues(alpha: 0.72)
+          : AppColors.lightBgSecondary.withValues(alpha: 0.92),
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                _buildAnimatedCard(categories[0], 0),
-                const SizedBox(height: 24),
-                _buildAnimatedCard(categories[2], 2),
-              ],
-            ),
+          const SectionTitle(
+            tag: 'SKILLS',
+            title: 'The stack is here, but the real value is how I use it',
+            subtitle:
+                'Yes, a portfolio should show skills. It just works better when they are framed as capability and delivery, not a random tech dump.',
           ),
-          const SizedBox(width: 24),
-          Expanded(
+          const SizedBox(height: 40),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 900) {
+                return Column(
+                  children: pillars
+                      .map(
+                        (pillar) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _SkillPillarCard(data: pillar),
+                        ),
+                      )
+                      .toList(),
+                );
+              }
+
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: pillars.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final pillar = entry.value;
+
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: index == pillars.length - 1 ? 0 : 16,
+                      ),
+                      child: _SkillPillarCard(data: pillar),
+                    ),
+                  );
+                }).toList(),
+              );
+            },
+          ),
+          const SizedBox(height: 44),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: context.colorScheme.surface.withValues(
+                alpha: context.isDarkMode ? 0.74 : 0.94,
+              ),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: context.colorScheme.outline.withValues(alpha: 0.12),
+              ),
+            ),
             child: Column(
               children: [
-                _buildAnimatedCard(categories[1], 1),
+                Text(
+                  'Core stack',
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 760),
+                  child: Text(
+                    'A compact view is enough here. Visitors just need confidence in the tools you are strongest with.',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                      height: 1.7,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 const SizedBox(height: 24),
-                _buildAnimatedCard(categories[3], 3),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: featuredTech
+                      .map((tech) => TechBadgeLarge(tech: tech))
+                      .toList(),
+                ),
               ],
             ),
           ),
         ],
-      );
-    }
+      ),
+    );
+  }
+}
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: categories.asMap().entries.map((entry) {
-        final index = entry.key;
-        final category = entry.value;
+class _SkillPillarData {
+  final String title;
+  final String description;
+  final Color color;
+  final IconData icon;
+  final List<String> bullets;
 
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: index == 3 ? 0 : 24),
-            child: _buildAnimatedCard(category, index),
+  const _SkillPillarData({
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.icon,
+    required this.bullets,
+  });
+}
+
+class _SkillPillarCard extends StatelessWidget {
+  final _SkillPillarData data;
+
+  const _SkillPillarCard({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(
+          color: data.color.withValues(alpha: 0.22),
+          width: 1.4,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: data.color.withValues(
+              alpha: context.isDarkMode ? 0.08 : 0.05,
+            ),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildAnimatedCard(SkillCategory category, int index) {
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 500 + (index * 100)),
-      opacity: _isVisible ? 1.0 : 0.0,
-      child: AnimatedSlide(
-        duration: Duration(milliseconds: 500 + (index * 100)),
-        offset: _isVisible ? Offset.zero : const Offset(0, 0.2),
-        curve: Curves.easeOutCubic,
-        child: SkillCategoryCard(category: category),
+        ],
       ),
-    );
-  }
-
-  Widget _buildTechStackSection(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 40,
-              height: 2,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.transparent, colorScheme.primary],
-                ),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: data.color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(16),
             ),
-            const SizedBox(width: 16),
-            Text(
-              'TECH STACK',
-              style: textTheme.labelMedium?.copyWith(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 2,
-              ),
+            child: Icon(data.icon, color: data.color),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            data.title,
+            style: context.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
             ),
-            const SizedBox(width: 16),
-            Container(
-              width: 40,
-              height: 2,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [colorScheme.primary, Colors.transparent],
-                ),
-              ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            data.description,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+              height: 1.7,
             ),
-          ],
-        ),
-
-        const SizedBox(height: 40),
-
-        TechStackGrid(animate: _isVisible),
-      ],
-    );
-  }
-
-  Widget _buildProficiencySection(BuildContext context) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
-
-    final proficiencies = [
-      SkillProficiency(
-        name: 'Flutter & Dart',
-        percentage: 95,
-        color: AppColors.flutter,
-      ),
-      SkillProficiency(
-        name: 'State Management (Bloc/Provider)',
-        percentage: 90,
-        color: AppColors.accent,
-      ),
-      SkillProficiency(
-        name: 'Firebase & Backend Integration',
-        percentage: 88,
-        color: AppColors.firebase,
-      ),
-      SkillProficiency(
-        name: 'UI/UX Implementation',
-        percentage: 92,
-        color: AppColors.figma,
-      ),
-      SkillProficiency(
-        name: 'Clean Architecture & SOLID',
-        percentage: 85,
-        color: AppColors.success,
-      ),
-      SkillProficiency(
-        name: 'Git & Version Control',
-        percentage: 90,
-        color: AppColors.git,
-      ),
-    ];
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 40,
-              height: 2,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.transparent, colorScheme.primary],
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Text(
-              'PROFICIENCY',
-              style: textTheme.labelMedium?.copyWith(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 2,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Container(
-              width: 40,
-              height: 2,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [colorScheme.primary, Colors.transparent],
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 40),
-
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Column(
-            children: List.generate(proficiencies.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 500 + (index * 100)),
-                  opacity: _isVisible ? 1.0 : 0.0,
-                  child: AnimatedSlide(
-                    duration: Duration(milliseconds: 500 + (index * 100)),
-                    offset: _isVisible ? Offset.zero : const Offset(-0.1, 0),
-                    curve: Curves.easeOutCubic,
-                    child: SkillBar(
-                      proficiency: proficiencies[index],
-                      animate: _isVisible,
-                      delay: Duration(milliseconds: index * 150),
+          ),
+          const SizedBox(height: 18),
+          ...data.bullets.map(
+            (bullet) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: data.color,
+                      shape: BoxShape.circle,
                     ),
                   ),
-                ),
-              );
-            }),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      bullet,
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        height: 1.6,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

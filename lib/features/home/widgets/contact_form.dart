@@ -253,7 +253,7 @@ ${_messageCtrl.text}
 
             Center(
               child: Text(
-                'I reply within 12–24 hours • 100% response rate',
+                'I usually reply within 12-24 hours',
                 style: TextStyle(
                   fontSize: isSmallMobile ? 12 : 13,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,

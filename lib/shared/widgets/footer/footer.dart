@@ -336,14 +336,14 @@ class Footer extends StatelessWidget {
     _FooterLink('Home', RouteNames.home),
     _FooterLink('About', RouteNames.about),
     _FooterLink('Projects', RouteNames.projects),
-    _FooterLink('Blog', RouteNames.blog),
+    _FooterLink('Contact', RouteNames.hireMe),
   ];
 
   static const _resourceLinks = [
     _FooterLink('Resume', AppUrls.resumeUrl, isExternal: true),
     _FooterLink('GitHub', AppUrls.github, isExternal: true),
+    _FooterLink('LinkedIn', AppUrls.linkedin, isExternal: true),
     _FooterLink('Pub.dev', AppUrls.pubDevProfile, isExternal: true),
-    _FooterLink('Buy Me a Coffee', AppUrls.buyMeACoffee, isExternal: true),
   ];
 }
 

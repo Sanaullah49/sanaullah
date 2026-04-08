@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:ui';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -90,12 +91,10 @@ class _NavbarState extends ConsumerState<Navbar> {
       ),
       child: ClipRRect(
         child: BackdropFilter(
-          filter: _isScrolled
-              ? ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.1),
-                  BlendMode.srcOver,
-                )
-              : ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+          filter: ImageFilter.blur(
+            sigmaX: _isScrolled ? 18 : 0,
+            sigmaY: _isScrolled ? 18 : 0,
+          ),
           child: SafeArea(
             bottom: false,
             child: Container(
@@ -151,11 +150,12 @@ class _NavbarState extends ConsumerState<Navbar> {
               ),
               child: Center(
                 child: Text(
-                  'S',
+                  'SU',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: isMobile ? 18 : 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: isMobile ? 14 : 15,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.1,
                   ),
                 ),
               ),
@@ -198,9 +198,9 @@ class _NavbarState extends ConsumerState<Navbar> {
         ),
         const SizedBox(width: 8),
         NavItem(
-          label: 'Blog',
-          path: RouteNames.blog,
-          isActive: widget.currentPath.startsWith(RouteNames.blog),
+          label: 'Contact',
+          path: RouteNames.hireMe,
+          isActive: widget.currentPath == RouteNames.hireMe,
         ),
       ],
     );

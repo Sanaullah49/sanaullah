@@ -1,6 +1,10 @@
+import 'package:flutter/material.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_urls.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../open_source/data/open_source_data.dart';
+import '../../open_source/models/github_models.dart';
 import '../models/project_model.dart';
 
 class ProjectsData {
@@ -100,9 +104,9 @@ The package follows Flutter's best practices for package development and include
       title: 'Medical Device App',
       slug: 'medical-device-app',
       shortDescription:
-          'Native Android app for serial port communication with medical hardware devices for real-time health monitoring.',
+          'Native Android app for serial port communication with medical hardware devices and real-time device data capture.',
       fullDescription: '''
-A specialized healthcare application that interfaces with medical devices through serial port communication, enabling real-time health data monitoring and analysis.
+A specialized healthcare application that interfaces with medical devices through serial port communication, enabling real-time device data capture and analysis.
 
 This project required deep understanding of hardware communication protocols, Android's USB/Serial APIs, and strict adherence to healthcare data standards.
 
@@ -132,7 +136,8 @@ Built primarily in Java with Android SDK, demonstrating my versatility beyond Fl
         'Ensuring data accuracy for medical-grade applications',
         'Meeting healthcare compliance requirements',
       ],
-      impact: 'Deployed in healthcare facilities for patient monitoring',
+      impact:
+          'Deployed in healthcare facilities for reliable device data workflows',
       completedAt: DateTime(2025, 1, 1),
       isFeatured: true,
       accentColor: AppColors.error,
@@ -186,12 +191,12 @@ This project showcases my ability to build consumer-facing products with engagin
 
     Project(
       id: '5',
-      title: 'Izzana Restaurant POS',
-      slug: 'izzana-pos',
+      title: 'Izzana Ordering App',
+      slug: 'izzana-ordering',
       shortDescription:
-          'Complete point-of-sale system for restaurants with offline-first architecture and real-time sync.',
+          'Restaurant ordering and operations app with offline-first architecture and real-time sync.',
       fullDescription: '''
-A comprehensive POS solution designed specifically for restaurants, featuring order management, table tracking, and payment processing.
+A comprehensive ordering solution designed specifically for restaurants, featuring order management, table tracking, and payment flows.
 
 Built with an offline-first approach to ensure reliability even without internet connectivity, with seamless sync when connection is restored.
 
@@ -200,7 +205,7 @@ The app received a 4.5+ star rating for its intuitive Material Design UI/UX.
       mockupImage: AppAssets.mockupPOS,
       screenshots: const [],
       technologies: const ['Flutter', 'Firebase', 'Stripe', 'SQLite', 'Bloc'],
-      category: ProjectCategory.fintech,
+      category: ProjectCategory.ecommerce,
       status: ProjectStatus.completed,
       features: const [
         'Order management system',
@@ -214,7 +219,7 @@ The app received a 4.5+ star rating for its intuitive Material Design UI/UX.
       ],
       challenges: const [
         'Building reliable offline-first sync mechanism',
-        'Integrating with various payment providers',
+        'Coordinating payment and order workflows across shifts',
         'Creating intuitive UI for fast-paced restaurant environment',
       ],
       impact: 'Achieved 4.5+ star rating, used by multiple restaurants',
@@ -268,44 +273,6 @@ Built with scalability in mind to handle growing user bases and product catalogs
       accentColor: AppColors.primary,
     ),
 
-    const Project(
-      id: '7',
-      title: 'Health Monitoring Suite',
-      slug: 'health-monitoring-suite',
-      shortDescription:
-          'Flutter + Native Android health apps for real-time patient monitoring with medical device integration.',
-      fullDescription: '''
-A suite of health monitoring applications developed at Cross Sonic, interfacing with various medical devices for patient health tracking.
-
-The project combines Flutter for the main interface with native Android components for hardware communication.
-
-Implements clean architecture and SOLID principles, reducing codebase complexity by 30%.
-      ''',
-      mockupImage: AppAssets.mockupMedicalDevice,
-      screenshots: [],
-      technologies: ['Flutter', 'Java', 'Android SDK', 'Bluetooth', 'Firebase'],
-      category: ProjectCategory.healthcare,
-      status: ProjectStatus.inProgress,
-      features: [
-        'Real-time health metrics',
-        'Medical device connectivity',
-        'Patient data management',
-        'Doctor dashboard',
-        'Alert notifications',
-        'Historical data analysis',
-        'Compliance with health standards',
-      ],
-      challenges: [
-        'Bridging Flutter and native Android for hardware access',
-        'Ensuring real-time data accuracy',
-        'Meeting healthcare regulatory requirements',
-      ],
-      impact: 'Used in healthcare facilities for patient care',
-      completedAt: null,
-      isFeatured: false,
-      accentColor: AppColors.error,
-    ),
-
     Project(
       id: '8',
       title: 'File Manager Pro',
@@ -336,12 +303,488 @@ Published on the Play Store as part of the utility apps collection at Mega Minds
         'Handling large file operations efficiently',
         'Creating intuitive file navigation UX',
       ],
-      impact: 'Part of 10+ apps published on Play Store',
+      impact: 'Part of a broader Play Store portfolio of consumer utility apps',
       completedAt: DateTime(2024, 2, 1),
       isFeatured: false,
       accentColor: AppColors.info,
     ),
+    ..._expandedPortfolioProjects,
+    ..._publisherPackageProjects,
   ];
+
+  static final List<Project> _expandedPortfolioProjects = [
+    _portfolioProject(
+      id: '9',
+      title: 'RoadmapForge',
+      slug: 'roadmapforge',
+      shortDescription:
+          'Next.js customer feedback and public roadmap platform built for small B2B SaaS teams.',
+      fullDescription: '''
+RoadmapForge is a customer feedback and roadmap platform built with Next.js and deployed on Vercel.
+
+It gives small B2B SaaS teams a branded feedback board, a public roadmap, and an internal workspace for triaging requests, tracking votes, and sharing product updates in one place.
+
+The product was built quickly with a strong product-first mindset, pairing a polished marketing experience with a workflow that helps founders replace scattered support conversations with one clear feedback loop.
+      ''',
+      mockupImage: AppAssets.placeholderProject,
+      technologies: const ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+      category: ProjectCategory.webApp,
+      liveUrl: 'https://roadmapforge.vercel.app/',
+      features: const [
+        'Public feedback board and roadmap',
+        'Request voting and prioritization',
+        'Admin workspace for triage and updates',
+        'Pricing, demo, and onboarding flows',
+        'API and webhook-ready product positioning',
+      ],
+      challenges: const [
+        'Designing a simple feedback workflow for small SaaS teams',
+        'Balancing polished marketing with product usability',
+        'Shipping a cohesive MVP quickly without losing quality',
+      ],
+      impact:
+          'Live product site and SaaS prototype built end-to-end with Next.js.',
+      isFeatured: true,
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '10',
+      title: 'Waterfall Wallpaper Live',
+      slug: 'waterfall-wallpaper-live',
+      shortDescription:
+          'Live wallpaper app featuring waterfall scenes, motion backgrounds, and quick personalization.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'AdMob', 'Video Player'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.rsapps.waterfall.wallpaper.live',
+      impact:
+          'Published on Google Play as part of a growing wallpaper app portfolio.',
+      accentColor: AppColors.secondary,
+    ),
+    _portfolioProject(
+      id: '11',
+      title: 'Love Status Video Quotes',
+      slug: 'love-status-video-quotes',
+      shortDescription:
+          'Shareable video status and quote app centered on love-themed short-form content.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'Firebase', 'AdMob'],
+      category: ProjectCategory.mobileApp,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.rsapps.love.status.video.quotes',
+      impact:
+          'Built for high-frequency browsing and sharing in a lightweight consumer app flow.',
+      accentColor: AppColors.error,
+    ),
+    _portfolioProject(
+      id: '12',
+      title: 'Live Video Wallpaper',
+      slug: 'live-video-wallpaper',
+      shortDescription:
+          'Video wallpaper utility for applying animated backgrounds to the home and lock screen.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'Video Player', 'AdMob'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.offlinestudio.live.video.wallpaper.video_wall',
+      impact:
+          'Published as part of a consumer utility lineup focused on media-rich personalization.',
+      accentColor: AppColors.secondary,
+    ),
+    _portfolioProject(
+      id: '13',
+      title: 'Signature Maker Sign Creator',
+      slug: 'signature-maker-sign-creator',
+      shortDescription:
+          'Digital signature utility for creating stylized signatures and quick sign assets on mobile.',
+      technologies: const ['Flutter', 'Dart', 'Custom Paint', 'PDF'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.docusign.signaturemaker.signcreator',
+      impact:
+          'Built to streamline signature creation into a fast, single-purpose mobile workflow.',
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '14',
+      title: 'One Anime Piece Wallpapers Live',
+      slug: 'one-anime-piece-wallpapers-live',
+      shortDescription:
+          'Anime-focused wallpaper app with themed live backgrounds and fan-oriented customization.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'AdMob', 'Video Player'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.ccapps.ONEanimePiece.wallpapersLive',
+      impact:
+          'Expanded the themed wallpaper catalog with a niche audience-focused release.',
+      accentColor: AppColors.secondary,
+    ),
+    _portfolioProject(
+      id: '15',
+      title: 'Dragon Wallpapers Live',
+      slug: 'dragon-wallpapers-live',
+      shortDescription:
+          'Wallpaper app featuring dragon-themed static and animated backgrounds for Android.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'AdMob', 'Video Player'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.ims.dragon.wallpapers.live',
+      impact:
+          'Built as part of a themed live-wallpaper release cycle for Android users.',
+      accentColor: AppColors.secondary,
+    ),
+    _portfolioProject(
+      id: '16',
+      title: 'Retro Gaming Wallpapers',
+      slug: 'retro-gaming-wallpapers',
+      shortDescription:
+          'Retro gaming wallpaper app with nostalgic artwork, pixel-inspired themes, and curated backgrounds.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'Firebase', 'AdMob'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.lgs.retroGaming.Wallpapers',
+      impact:
+          'Added a nostalgia-driven visual theme to the Play Store wallpaper portfolio.',
+      accentColor: AppColors.warning,
+    ),
+    _portfolioProject(
+      id: '17',
+      title: 'Full Battery Charging Alarm',
+      slug: 'full-battery-charging-alarm',
+      shortDescription:
+          'Battery alarm utility with low-battery alerts, full-charge alarms, and charging reminders.',
+      technologies: const ['Flutter', 'Dart', 'Notifications', 'Android SDK'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.emt.lowbatteryalarm.chargealarm',
+      impact:
+          'Built for practical daily utility use with clear alert-focused UX.',
+      accentColor: AppColors.warning,
+    ),
+    _portfolioProject(
+      id: '18',
+      title: 'Video Player',
+      slug: 'video-player',
+      shortDescription:
+          'Offline video player with local media browsing, playback controls, and lightweight navigation.',
+      technologies: const ['Flutter', 'Dart', 'Video Player', 'File Access'],
+      category: ProjectCategory.utility,
+      impact:
+          'Created as a focused media utility with dependable playback and simple controls.',
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '19',
+      title: 'PDF Master Pro',
+      slug: 'pdf-master-pro',
+      shortDescription:
+          'PDF productivity app for reading, organizing, and sharing documents on Android.',
+      technologies: const ['Flutter', 'Dart', 'PDF', 'File Management'],
+      category: ProjectCategory.utility,
+      impact:
+          'Built around fast document access and lightweight file productivity on mobile.',
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '20',
+      title: 'Ghost VPN',
+      slug: 'ghost-vpn',
+      shortDescription:
+          'Privacy-focused VPN app for secure browsing and location switching on Android.',
+      technologies: const ['Flutter', 'Dart', 'REST API', 'Android SDK'],
+      category: ProjectCategory.utility,
+      impact:
+          'Added a privacy-focused networking tool to the broader utility app portfolio.',
+      accentColor: AppColors.primary,
+    ),
+    _portfolioProject(
+      id: '21',
+      title: 'Full QR Suite',
+      slug: 'full-qr-suite',
+      shortDescription:
+          'All-in-one QR scanner and generator with history, sharing, and utility tools.',
+      technologies: const ['Flutter', 'Dart', 'Camera', 'QR'],
+      category: ProjectCategory.utility,
+      impact:
+          'Designed as a practical scan-and-generate tool with fast everyday workflows.',
+      accentColor: AppColors.accent,
+    ),
+    _portfolioProject(
+      id: '22',
+      title: 'Custom Icon Changer',
+      slug: 'custom-icon-changer',
+      shortDescription:
+          'Android customization app for swapping launcher icons and personalizing home screen shortcuts.',
+      technologies: const ['Flutter', 'Dart', 'Android Intents', 'Launcher'],
+      category: ProjectCategory.utility,
+      impact:
+          'Built for Android personalization with a quick-create, low-friction setup flow.',
+      accentColor: AppColors.secondary,
+    ),
+    _portfolioProject(
+      id: '23',
+      title: 'Easy Park',
+      slug: 'easy-park',
+      shortDescription:
+          'Parking companion app for saving parked locations and simplifying everyday parking flows.',
+      technologies: const ['Flutter', 'Dart', 'Maps', 'Location'],
+      category: ProjectCategory.utility,
+      impact:
+          'Created around a simple location-based workflow with clear everyday utility.',
+      accentColor: AppColors.warning,
+    ),
+    _portfolioProject(
+      id: '24',
+      title: 'Quotes App',
+      slug: 'quotes-app',
+      shortDescription:
+          'Daily quotes app with themed collections, favorites, and simple sharing experiences.',
+      technologies: const ['Flutter', 'Dart', 'Firebase', 'Share'],
+      category: ProjectCategory.mobileApp,
+      impact:
+          'Delivered as a lightweight content app optimized for quick reading and sharing.',
+      accentColor: AppColors.error,
+    ),
+    _portfolioProject(
+      id: '25',
+      title: 'Inventory Management System',
+      slug: 'inventory-management-system',
+      shortDescription:
+          'Stock and inventory app for tracking products, movement, and reorder workflows.',
+      mockupImage: AppAssets.mockupEcommerce,
+      technologies: const ['Flutter', 'Dart', 'Firebase', 'SQLite'],
+      category: ProjectCategory.ecommerce,
+      impact:
+          'Built to support operational inventory workflows with mobile-first usability.',
+      accentColor: AppColors.primary,
+    ),
+    _portfolioProject(
+      id: '26',
+      title: 'Notes & Todo',
+      slug: 'notes-and-todo',
+      shortDescription:
+          'Personal productivity app for notes, checklists, reminders, and daily planning.',
+      technologies: const ['Flutter', 'Dart', 'Hive', 'Notifications'],
+      category: ProjectCategory.utility,
+      impact:
+          'Focused on fast capture, reminders, and clean personal task management flows.',
+      accentColor: AppColors.accent,
+    ),
+    _portfolioProject(
+      id: '27',
+      title: 'All Language Translator',
+      slug: 'all-language-translator',
+      shortDescription:
+          'Multilingual translator app for quick text translation, sharing, and travel-friendly usage.',
+      technologies: const ['Flutter', 'Dart', 'REST API', 'Localization'],
+      category: ProjectCategory.utility,
+      impact:
+          'Built as a general-purpose translation tool with speed and simplicity as priorities.',
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '28',
+      title: 'GPS Maps Navigation Live Route Finder',
+      slug: 'gps-maps-navigation-live-route-finder',
+      shortDescription:
+          'Navigation utility with maps, route finding, and trip assistance for Android users.',
+      technologies: const ['Flutter', 'Dart', 'Maps', 'Location'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.offlineapps.gps.maps.navigation.live.routefinder',
+      impact:
+          'Built around location-aware navigation flows and practical route support features.',
+      accentColor: AppColors.primary,
+    ),
+    _portfolioProject(
+      id: '29',
+      title: 'Wallpaper Admin Panels & Dashboards',
+      slug: 'wallpaper-admin-panels-dashboards',
+      shortDescription:
+          'Internal admin panels for managing wallpaper catalogs, dashboards, featured content, and app operations across multiple wallpaper products.',
+      fullDescription: '''
+An internal operations suite built to support the wallpaper app portfolio with centralized admin panels and dashboards.
+
+These tools help manage wallpaper uploads, category curation, promotional sections, content moderation, and release-time operations across multiple consumer wallpaper apps.
+
+The dashboards were designed to reduce repetitive manual work and make it easier to keep large wallpaper catalogs fresh, organized, and aligned with each app's theme.
+      ''',
+      technologies: const ['Flutter', 'Dart', 'Firebase', 'Analytics'],
+      category: ProjectCategory.webApp,
+      features: const [
+        'Wallpaper upload and content curation',
+        'Category and collection management',
+        'Featured banners and release control',
+        'Dashboard views for content operations',
+        'Multi-app admin workflow support',
+      ],
+      challenges: const [
+        'Keeping admin workflows simple across multiple apps',
+        'Organizing large visual catalogs efficiently',
+        'Reducing repeated manual content operations',
+      ],
+      impact:
+          'Improved day-to-day content operations for the broader wallpaper app portfolio.',
+      accentColor: AppColors.info,
+    ),
+    _portfolioProject(
+      id: '30',
+      title: 'PixEdge',
+      slug: 'pixedge',
+      shortDescription:
+          '4K live wallpaper app with animated backgrounds, visual personalization, and media-rich Android wallpaper flows.',
+      mockupImage: AppAssets.mockupAnimeWallpaper,
+      technologies: const ['Flutter', 'Dart', 'AdMob', 'Video Player'],
+      category: ProjectCategory.utility,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.cre8ivex.pixedge',
+      impact:
+          'Added another media-rich personalization app to the live wallpaper portfolio on Google Play.',
+      accentColor: AppColors.secondary,
+    ),
+  ];
+
+  static final List<Project> _publisherPackageProjects = OpenSourceData.packages
+      .where((package) => package.name != 'custom_ruler')
+      .toList()
+      .asMap()
+      .entries
+      .map((entry) => _buildPublisherPackageProject(entry.value, entry.key))
+      .toList();
+
+  static Project _buildPublisherPackageProject(
+    PubDevPackage package,
+    int index,
+  ) {
+    final title = _packageTitle(package.name);
+    final platforms = package.platforms.take(3);
+
+    return Project(
+      id: 'pkg-${index + 1}',
+      title: title,
+      slug: package.name.replaceAll('_', '-'),
+      shortDescription: package.description,
+      fullDescription:
+          '''
+$title is one of the Flutter packages published under my verified thesanaullah.dev publisher profile on pub.dev.
+
+${package.description}
+
+This project entry is generated from the publisher package catalog so the Packages filter stays aligned with the open source section and my current pub.dev listings.
+      ''',
+      mockupImage: AppAssets.placeholderProject,
+      screenshots: const [],
+      technologies: ['Flutter', 'Dart', ...platforms],
+      category: ProjectCategory.package,
+      status: ProjectStatus.maintenance,
+      pubDevUrl: package.url,
+      features: [
+        'Published package version ${package.version}',
+        '${package.pubPoints} pub points on pub.dev',
+        if (package.downloads != null)
+          '${package.downloads} downloads recorded on pub.dev',
+        'Available for ${package.platforms.join(', ')}',
+      ],
+      impact: package.downloads != null
+          ? '${package.pubPoints} pub points and ${package.downloads} downloads on pub.dev.'
+          : '${package.pubPoints} pub points on pub.dev.',
+      isFeatured: false,
+      accentColor: _packageAccentColor(index),
+    );
+  }
+
+  static String _packageTitle(String name) {
+    const overrides = {
+      'ai_kit': 'Assistant Kit',
+      'arc_progress_ring': 'Arc Progress Ring',
+      'auto_theme': 'Auto Theme',
+      'custom_ruler': 'Custom Ruler',
+      'flutter_build_doctor': 'Flutter Build Doctor',
+      'flutter_lifecycle_guard': 'Flutter Lifecycle Guard',
+      'flutter_wallpaper_plus': 'Flutter Wallpaper Plus',
+      'goal_progress_indicator': 'Goal Progress Indicator',
+      'hyper_table': 'Hyper Table',
+      'magic_responsive': 'Magic Responsive',
+      'vidkit': 'VidKit',
+      'webify_toolkit': 'Webify Toolkit',
+    };
+
+    return overrides[name] ??
+        name
+            .split('_')
+            .map(
+              (segment) => segment.isEmpty
+                  ? segment
+                  : '${segment[0].toUpperCase()}${segment.substring(1)}',
+            )
+            .join(' ');
+  }
+
+  static Color _packageAccentColor(int index) {
+    const palette = [
+      AppColors.accent,
+      AppColors.info,
+      AppColors.primary,
+      AppColors.success,
+      AppColors.secondary,
+      AppColors.warning,
+    ];
+
+    return palette[index % palette.length];
+  }
+
+  static Project _portfolioProject({
+    required String id,
+    required String title,
+    required String slug,
+    required String shortDescription,
+    required List<String> technologies,
+    required ProjectCategory category,
+    String? fullDescription,
+    String mockupImage = AppAssets.placeholderProject,
+    String? playStoreUrl,
+    String? liveUrl,
+    String? impact,
+    ProjectStatus status = ProjectStatus.completed,
+    List<String> features = const [],
+    List<String> challenges = const [],
+    DateTime? completedAt,
+    bool isFeatured = false,
+    Color? accentColor,
+  }) {
+    return Project(
+      id: id,
+      title: title,
+      slug: slug,
+      shortDescription: shortDescription,
+      fullDescription:
+          fullDescription ??
+          '''
+$title is part of my production app portfolio and was built around a focused user workflow.
+
+$shortDescription
+
+The project reflects my experience shipping consumer utilities, content apps, and business tools with practical UX and release-ready polish.
+      ''',
+      mockupImage: mockupImage,
+      screenshots: const [],
+      technologies: technologies,
+      category: category,
+      status: status,
+      liveUrl: liveUrl,
+      playStoreUrl: playStoreUrl,
+      features: features,
+      challenges: challenges,
+      impact: impact,
+      completedAt: completedAt,
+      isFeatured: isFeatured,
+      accentColor: accentColor ?? category.color,
+    );
+  }
 
   static List<Project> get featuredProjects =>
       allProjects.where((p) => p.isFeatured).toList();

@@ -1,43 +1,10 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
 
-class HeroBackground extends StatefulWidget {
+class HeroBackground extends StatelessWidget {
   const HeroBackground({super.key});
-
-  @override
-  State<HeroBackground> createState() => _HeroBackgroundState();
-}
-
-class _HeroBackgroundState extends State<HeroBackground>
-    with TickerProviderStateMixin {
-  late AnimationController _gradientController;
-  late AnimationController _particleController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _gradientController = AnimationController(
-      duration: const Duration(seconds: 10),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _particleController = AnimationController(
-      duration: const Duration(seconds: 20),
-      vsync: this,
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _gradientController.dispose();
-    _particleController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,109 +15,101 @@ class _HeroBackgroundState extends State<HeroBackground>
         return Stack(
           fit: StackFit.expand,
           children: [
-            AnimatedBuilder(
-              animation: _gradientController,
-              builder: (context, child) {
-                return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: isDark
-                          ? [
-                              AppColors.darkBg,
-                              Color.lerp(
-                                AppColors.darkBg,
-                                AppColors.primary.withValues(alpha: 0.05),
-                                _gradientController.value,
-                              )!,
-                              AppColors.darkBgSecondary,
-                            ]
-                          : [
-                              AppColors.lightBg,
-                              Color.lerp(
-                                AppColors.lightBg,
-                                AppColors.primary.withValues(alpha: 0.03),
-                                _gradientController.value,
-                              )!,
-                              AppColors.lightBgSecondary,
-                            ],
-                    ),
-                  ),
-                );
-              },
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isDark
+                      ? [
+                          AppColors.darkBg,
+                          const Color(0xFF17153A),
+                          AppColors.darkBgSecondary,
+                        ]
+                      : [
+                          AppColors.lightBg,
+                          const Color(0xFFF1EEFF),
+                          AppColors.lightBgSecondary,
+                        ],
+                ),
+              ),
             ),
-
             Positioned.fill(
               child: CustomPaint(
-                painter: GridPatternPainter(
+                painter: _GridPatternPainter(
                   color: isDark
-                      ? Colors.white.withValues(alpha: 0.02)
-                      : Colors.black.withValues(alpha: 0.02),
+                      ? Colors.white.withValues(alpha: 0.035)
+                      : Colors.black.withValues(alpha: 0.035),
                 ),
               ),
             ),
-
             Positioned(
-              top: -100,
-              right: -100,
-              child: _GlowSpot(
+              top: -120,
+              right: -60,
+              child: _GlowBlob(
                 color: AppColors.primary.withValues(
-                  alpha: isDark ? 0.15 : 0.08,
+                  alpha: isDark ? 0.22 : 0.14,
                 ),
-                size: 400,
-                controller: _gradientController,
+                size: 360,
               ),
             ),
             Positioned(
-              bottom: -50,
-              left: -50,
-              child: _GlowSpot(
-                color: AppColors.accent.withValues(alpha: isDark ? 0.1 : 0.05),
-                size: 300,
-                controller: _gradientController,
-                reverse: true,
+              bottom: -100,
+              left: -80,
+              child: _GlowBlob(
+                color: AppColors.secondary.withValues(
+                  alpha: isDark ? 0.18 : 0.12,
+                ),
+                size: 320,
               ),
             ),
-
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _particleController,
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: ParticlesPainter(
-                      progress: _particleController.value,
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.3)
-                          : AppColors.primary.withValues(alpha: 0.2),
-                      size: constraints.biggest,
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            Positioned.fill(
+            Align(
+              alignment: Alignment.centerRight,
               child: Container(
+                width: constraints.maxWidth * 0.34,
+                margin: EdgeInsets.only(
+                  right: constraints.maxWidth > 900 ? 48 : 16,
+                  top: 80,
+                  bottom: 80,
+                ),
                 decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: Alignment.center,
-                    radius: 1.5,
+                  border: Border.all(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.06)
+                        : Colors.black.withValues(alpha: 0.06),
+                  ),
+                  borderRadius: BorderRadius.circular(32),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
+                      Colors.white.withValues(alpha: isDark ? 0.02 : 0.35),
                       Colors.transparent,
-                      (isDark ? AppColors.darkBg : AppColors.lightBg)
-                          .withValues(alpha: 0.8),
                     ],
                   ),
                 ),
               ),
             ),
-
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.topLeft,
+                    radius: 1.35,
+                    colors: [
+                      Colors.transparent,
+                      (isDark ? AppColors.darkBg : AppColors.lightBg)
+                          .withValues(alpha: 0.86),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              height: 200,
+              height: 220,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -171,115 +130,59 @@ class _HeroBackgroundState extends State<HeroBackground>
   }
 }
 
-class _GlowSpot extends StatelessWidget {
+class _GlowBlob extends StatelessWidget {
   final Color color;
   final double size;
-  final AnimationController controller;
-  final bool reverse;
 
-  const _GlowSpot({
-    required this.color,
-    required this.size,
-    required this.controller,
-    this.reverse = false,
-  });
+  const _GlowBlob({required this.color, required this.size});
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        final value = reverse ? 1 - controller.value : controller.value;
-        final scale = 0.8 + (value * 0.4);
-
-        return Transform.scale(
-          scale: scale,
-          child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [color, color.withValues(alpha: 0)],
-              ),
-            ),
-          ),
-        );
-      },
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
+      ),
     );
   }
 }
 
-class GridPatternPainter extends CustomPainter {
+class _GridPatternPainter extends CustomPainter {
   final Color color;
-  final double spacing;
 
-  GridPatternPainter({required this.color, this.spacing = 50});
+  _GridPatternPainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    const spacing = 56.0;
+    final minor = Paint()
       ..color = color
-      ..strokeWidth = 0.5;
+      ..strokeWidth = 0.8;
+    final major = Paint()
+      ..color = color.withValues(alpha: 1.65)
+      ..strokeWidth = 1.1;
 
     for (double x = 0; x < size.width; x += spacing) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+      final isMajor = ((x / spacing).round()) % 4 == 0;
+      canvas.drawLine(
+        Offset(x, 0),
+        Offset(x, size.height),
+        isMajor ? major : minor,
+      );
     }
 
     for (double y = 0; y < size.height; y += spacing) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+      final isMajor = ((y / spacing).round()) % 4 == 0;
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        isMajor ? major : minor,
+      );
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class ParticlesPainter extends CustomPainter {
-  final double progress;
-  final Color color;
-  final int particleCount;
-  final Size size;
-
-  ParticlesPainter({
-    required this.progress,
-    required this.color,
-    this.particleCount = 30,
-    required this.size,
-  });
-
-  @override
-  void paint(Canvas canvas, Size canvasSize) {
-    final effectiveSize = size.isEmpty ? canvasSize : size;
-
-    if (effectiveSize.isEmpty) return;
-
-    final random = math.Random(42);
-
-    for (int i = 0; i < particleCount; i++) {
-      final startX = random.nextDouble() * effectiveSize.width;
-      final startY = random.nextDouble() * effectiveSize.height;
-
-      final speed = 0.5 + random.nextDouble() * 0.5;
-      final offset = progress * speed * effectiveSize.height * 0.3;
-
-      final x = startX + math.sin(progress * math.pi * 2 + i) * 20;
-      final y = (startY - offset) % effectiveSize.height;
-
-      final particleSize = 1.5 + random.nextDouble() * 2.5;
-
-      final opacity = (1 - (y / effectiveSize.height)) * 0.8;
-
-      final paint = Paint()
-        ..color = color.withValues(alpha: opacity.clamp(0.1, 0.6))
-        ..style = PaintingStyle.fill;
-
-      canvas.drawCircle(Offset(x, y), particleSize, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant ParticlesPainter oldDelegate) {
-    return oldDelegate.progress != progress;
-  }
 }

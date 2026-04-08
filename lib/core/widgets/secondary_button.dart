@@ -32,6 +32,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
+    final isCompact = MediaQuery.of(context).size.width < 400;
 
     return SizedBox(
       width: widget.fullWidth ? double.infinity : widget.width,
@@ -44,7 +45,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
           onTap: widget.isLoading ? null : widget.onPressed,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(horizontal: isCompact ? 20 : 32),
             decoration: BoxDecoration(
               color: _isHovered
                   ? colorScheme.primary.withValues(alpha: 0.1)
@@ -65,32 +66,35 @@ class _SecondaryButtonState extends State<SecondaryButton> {
                         strokeWidth: 2.5,
                       ),
                     )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (widget.icon != null) ...[
-                          Icon(
-                            widget.icon,
-                            color: _isHovered
-                                ? colorScheme.primary
-                                : colorScheme.onSurfaceVariant,
-                            size: 20,
+                  : FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (widget.icon != null) ...[
+                            Icon(
+                              widget.icon,
+                              color: _isHovered
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                              size: isCompact ? 18 : 20,
+                            ),
+                            SizedBox(width: isCompact ? 8 : 10),
+                          ],
+                          Text(
+                            widget.text,
+                            style: TextStyle(
+                              color: _isHovered
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                              fontSize: isCompact ? 15 : 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3,
+                            ),
                           ),
-                          const SizedBox(width: 10),
                         ],
-                        Text(
-                          widget.text,
-                          style: TextStyle(
-                            color: _isHovered
-                                ? colorScheme.primary
-                                : colorScheme.onSurfaceVariant,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
             ),
           ),

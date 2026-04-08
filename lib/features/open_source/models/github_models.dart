@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 
 class GitHubStats {
   final int publicRepos;
+  final int privateRepos;
   final int followers;
   final int following;
   final int totalStars;
@@ -14,6 +15,7 @@ class GitHubStats {
 
   const GitHubStats({
     this.publicRepos = 0,
+    this.privateRepos = 0,
     this.followers = 0,
     this.following = 0,
     this.totalStars = 0,
@@ -25,7 +27,8 @@ class GitHubStats {
 
   factory GitHubStats.mock() {
     return const GitHubStats(
-      publicRepos: 25,
+      publicRepos: 20,
+      privateRepos: 130,
       followers: 120,
       following: 50,
       totalStars: 85,
@@ -91,7 +94,7 @@ class PubDevPackage {
   final String url;
   final int likes;
   final int pubPoints;
-  final int popularity;
+  final int? downloads;
   final List<String> platforms;
   final DateTime? publishedAt;
   final bool isVerified;
@@ -103,15 +106,43 @@ class PubDevPackage {
     required this.url,
     this.likes = 0,
     this.pubPoints = 0,
-    this.popularity = 0,
+    this.downloads,
     this.platforms = const ['Android', 'iOS', 'Web'],
     this.publishedAt,
     this.isVerified = false,
   });
 
-  String get popularityString => '$popularity%';
+  String get downloadsLabel => downloads?.toString() ?? '--';
 
   bool get hasGoodScore => pubPoints >= 100;
+}
+
+enum ContributionStatus { merged, recent }
+
+class OpenSourceContribution {
+  final String reference;
+  final String title;
+  final String summary;
+  final String repository;
+  final String url;
+  final String dateLabel;
+  final String area;
+  final ContributionStatus status;
+  final List<String> tags;
+  final Color accentColor;
+
+  const OpenSourceContribution({
+    required this.reference,
+    required this.title,
+    required this.summary,
+    required this.repository,
+    required this.url,
+    required this.dateLabel,
+    required this.area,
+    required this.status,
+    this.tags = const [],
+    this.accentColor = AppColors.primary,
+  });
 }
 
 class ContributionDay {

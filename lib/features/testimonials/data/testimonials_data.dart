@@ -37,9 +37,9 @@ class TestimonialsData {
       role: 'Restaurant Owner',
       company: 'Izzana Restaurant',
       content:
-          "The POS system Sana developed transformed our restaurant operations. The offline-first approach means we never miss an order, even during internet outages. The UI is intuitive and our staff learned it quickly. Outstanding work!",
+          "The ordering system Sana developed transformed our restaurant operations. The offline-first approach means we never miss an order, even during internet outages. The UI is intuitive and our staff learned it quickly. Outstanding work!",
       rating: 5.0,
-      projectWorkedOn: 'Izzana POS',
+      projectWorkedOn: 'Izzana Ordering App',
       date: DateTime(2023, 5),
       source: TestimonialSource.direct,
       accentColor: AppColors.warning,
@@ -88,9 +88,9 @@ class TestimonialsData {
       role: 'Project Manager',
       company: 'ITZone Technology',
       content:
-          "Professional, skilled, and always delivers on time. The restaurant POS system Sana built exceeded our expectations. His attention to UI/UX details resulted in a 4.5+ star rating from users. Great communication throughout!",
+          "Professional, skilled, and always delivers on time. The restaurant ordering system Sana built exceeded our expectations. His attention to UI/UX details resulted in a 4.5+ star rating from users. Great communication throughout!",
       rating: 5.0,
-      projectWorkedOn: 'Restaurant POS',
+      projectWorkedOn: 'Restaurant Ordering',
       date: DateTime(2023, 6),
       source: TestimonialSource.direct,
       accentColor: AppColors.error,

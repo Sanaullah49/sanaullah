@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,54 +72,55 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
+    final bodyContent = Stack(
+      children: [
+        CustomScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(height: context.isMobile ? 70 : 80),
+            ),
+
+            SliverToBoxAdapter(child: widget.child),
+
+            const SliverToBoxAdapter(child: Footer()),
+          ],
+        ),
+
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isNavbarVisible ? Offset.zero : const Offset(0, -1),
+            child: Navbar(
+              currentPath: widget.currentPath,
+              scrollController: _scrollController,
+            ),
+          ),
+        ),
+
+        Positioned(
+          right: 24,
+          bottom: 24,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: _showScrollToTop ? 1.0 : 0.0,
+            child: AnimatedScale(
+              duration: const Duration(milliseconds: 300),
+              scale: _showScrollToTop ? 1.0 : 0.8,
+              child: ScrollToTopButton(onPressed: _scrollToTop),
+            ),
+          ),
+        ),
+      ],
+    );
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(height: context.isMobile ? 70 : 80),
-              ),
-
-              SliverToBoxAdapter(child: widget.child),
-
-              const SliverToBoxAdapter(child: Footer()),
-            ],
-          ),
-
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 300),
-              offset: _isNavbarVisible ? Offset.zero : const Offset(0, -1),
-              child: Navbar(
-                currentPath: widget.currentPath,
-                scrollController: _scrollController,
-              ),
-            ),
-          ),
-
-          Positioned(
-            right: 24,
-            bottom: 24,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: _showScrollToTop ? 1.0 : 0.0,
-              child: AnimatedScale(
-                duration: const Duration(milliseconds: 300),
-                scale: _showScrollToTop ? 1.0 : 0.8,
-                child: ScrollToTopButton(onPressed: _scrollToTop),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: kIsWeb ? SelectionArea(child: bodyContent) : bodyContent,
     );
   }
 }

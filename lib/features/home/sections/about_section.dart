@@ -1,303 +1,250 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_provider.dart';
-import '../../../core/utils/responsive_utils.dart';
-import '../../../core/utils/url_launcher_utils.dart';
-import '../../../core/widgets/primary_button.dart';
-import '../../../core/widgets/secondary_button.dart';
 import '../../../core/widgets/section_title.dart';
 import '../../../core/widgets/section_wrapper.dart';
-import '../../../router/route_names.dart';
-import '../widgets/about_image.dart';
-import '../widgets/info_card.dart';
-import '../widgets/stats_row.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
+    final paragraphs = AppConstants.aboutDescription
+        .trim()
+        .split('\n\n')
+        .where((item) => item.trim().isNotEmpty)
+        .toList();
 
     return SectionWrapper(
       sectionId: 'about',
+      backgroundColor: context.isDarkMode
+          ? AppColors.darkBgSecondary.withValues(alpha: 0.8)
+          : AppColors.lightBgSecondary.withValues(alpha: 0.8),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1200),
         child: Column(
           children: [
             const SectionTitle(
-              tag: 'ABOUT ME',
-              title: 'Turning Ideas Into Reality',
+              tag: 'WHY ME',
+              title: 'Thoughtful delivery, not just Flutter implementation',
               subtitle:
-                  'A passionate Flutter developer dedicated to creating exceptional mobile experiences',
+                  'I work best with founders and product teams who need someone dependable across product polish, architecture, and shipping.',
             ),
+            const SizedBox(height: 64),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final useColumn = constraints.maxWidth < 940;
 
-            SizedBox(height: isMobile ? 48 : 80),
-
-            isMobile
-                ? _buildMobileLayout(context)
-                : (isTablet
-                      ? _buildTabletLayout(context)
-                      : _buildDesktopLayout(context)),
-
-            SizedBox(height: isMobile ? 48 : 80),
-
-            const StatsRow(),
+                return useColumn
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _AboutNarrative(paragraphs: paragraphs),
+                          const SizedBox(height: 28),
+                          const _AboutStrengths(),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: _AboutNarrative(paragraphs: paragraphs),
+                          ),
+                          const SizedBox(width: 32),
+                          const Expanded(flex: 5, child: _AboutStrengths()),
+                        ],
+                      );
+              },
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Expanded(flex: 5, child: AboutImage()),
-        const SizedBox(width: 80),
-        Expanded(
-          flex: 6,
-          child: _buildAboutContent(context, alignCenter: false),
-        ),
-      ],
-    );
-  }
+class _AboutNarrative extends StatelessWidget {
+  final List<String> paragraphs;
 
-  Widget _buildTabletLayout(BuildContext context) {
+  const _AboutNarrative({required this.paragraphs});
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AboutImage(isMobile: true),
-        const SizedBox(height: 60),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: _buildAboutContent(context, alignCenter: true),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMobileLayout(BuildContext context) {
-    return Column(
-      children: [
-        const AboutImage(isMobile: true),
-        const SizedBox(height: 48),
-        _buildAboutContent(context, alignCenter: true),
-      ],
-    );
-  }
-
-  Widget _buildAboutContent(BuildContext context, {required bool alignCenter}) {
-    final textTheme = context.textTheme;
-    final colorScheme = context.colorScheme;
-    final textAlign = alignCenter ? TextAlign.center : TextAlign.start;
-
-    return Column(
-      crossAxisAlignment: alignCenter
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Hello! I'm Sana Ullah, a passionate Flutter developer based in Lahore, Pakistan. "
-          "With over 3 years of hands-on experience, I specialize in building beautiful, "
-          "performant mobile applications that solve real-world problems.",
-          style: textTheme.bodyLarge?.copyWith(
-            height: 1.8,
-            fontSize: 16,
-            color: colorScheme.onSurfaceVariant,
+        ...paragraphs.map(
+          (paragraph) => Padding(
+            padding: const EdgeInsets.only(bottom: 18),
+            child: Text(
+              paragraph,
+              style: context.textTheme.bodyLarge?.copyWith(height: 1.85),
+            ),
           ),
-          textAlign: textAlign,
         ),
-        const SizedBox(height: 24),
-        Text(
-          "My journey has taken me through diverse domains including healthcare apps that "
-          "interface with medical devices, fintech solutions handling secure transactions, "
-          "and consumer products used by thousands of users daily.",
-          style: textTheme.bodyLarge?.copyWith(
-            height: 1.8,
-            fontSize: 16,
-            color: colorScheme.onSurfaceVariant,
-          ),
-          textAlign: textAlign,
-        ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 18),
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
-          children: [
-            InfoCard(
-              icon: Icons.location_on_rounded,
-              label: 'Location',
-              value: 'Lahore, Pakistan',
-              color: AppColors.primary,
+          spacing: 14,
+          runSpacing: 14,
+          children: const [
+            _MetricCard(
+              value: '25+',
+              label: 'Products released',
+              icon: Icons.rocket_launch_rounded,
             ),
-            InfoCard(
-              icon: Icons.work_rounded,
-              label: 'Experience',
-              value: '3+ Years',
-              color: AppColors.accent,
+            _MetricCard(
+              value: '3',
+              label: 'Core domains',
+              icon: Icons.layers_rounded,
             ),
-            InfoCard(
-              icon: Icons.language_rounded,
-              label: 'Languages',
-              value: 'English, Urdu',
-              color: AppColors.success,
-            ),
-            InfoCard(
-              icon: Icons.verified_rounded,
-              label: 'Status',
-              value: 'Available',
-              color: AppColors.warning,
+            _MetricCard(
+              value: '2',
+              label: 'Store ecosystems',
+              icon: Icons.phone_iphone_rounded,
             ),
           ],
-        ),
-        const SizedBox(height: 40),
-        _buildWhatIDo(context, alignCenter),
-        const SizedBox(height: 40),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
-          children: [
-            PrimaryButton(
-              text: 'Download Resume',
-              icon: Icons.download_rounded,
-              onPressed: () => UrlLauncherUtils.downloadResume(),
-            ),
-            SecondaryButton(
-              text: 'Let\'s Talk',
-              icon: Icons.chat_rounded,
-              onPressed: () => context.go(RouteNames.hireMe),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildWhatIDo(BuildContext context, bool alignCenter) {
-    final textTheme = context.textTheme;
-    final items = [
-      _WhatIDoItem(
-        icon: Icons.phone_android_rounded,
-        title: 'Mobile Development',
-        description: 'Native-quality apps for iOS & Android',
-      ),
-      _WhatIDoItem(
-        icon: Icons.architecture_rounded,
-        title: 'Clean Architecture',
-        description: 'Scalable & maintainable code structure',
-      ),
-      _WhatIDoItem(
-        icon: Icons.speed_rounded,
-        title: 'Performance',
-        description: 'Optimized for speed & efficiency',
-      ),
-      _WhatIDoItem(
-        icon: Icons.palette_rounded,
-        title: 'UI/UX Design',
-        description: 'Beautiful & intuitive interfaces',
-      ),
-    ];
-
-    return Column(
-      crossAxisAlignment: alignCenter
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      children: [
-        Text(
-          'What I Do',
-          style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-          textAlign: alignCenter ? TextAlign.center : TextAlign.start,
-        ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          alignment: alignCenter ? WrapAlignment.center : WrapAlignment.start,
-          children: items.map((item) => _WhatIDoChip(item: item)).toList(),
         ),
       ],
     );
   }
 }
 
-class _WhatIDoItem {
+class _AboutStrengths extends StatelessWidget {
+  const _AboutStrengths();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        _StrengthCard(
+          icon: Icons.architecture_rounded,
+          title: 'Architecture that stays readable',
+          description:
+              'I care about codebases that support iteration, onboarding, and debugging after the first release.',
+        ),
+        SizedBox(height: 16),
+        _StrengthCard(
+          icon: Icons.speed_rounded,
+          title: 'Calm product polish',
+          description:
+              'UI states, edge cases, performance, and release details get attention because they shape trust.',
+        ),
+        SizedBox(height: 16),
+        _StrengthCard(
+          icon: Icons.forum_rounded,
+          title: 'Clear collaboration',
+          description:
+              'You get honest technical judgment, predictable progress, and communication that reduces ambiguity.',
+        ),
+      ],
+    );
+  }
+}
+
+class _MetricCard extends StatelessWidget {
+  final String value;
+  final String label;
+  final IconData icon;
+
+  const _MetricCard({
+    required this.value,
+    required this.label,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 180,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: context.colorScheme.outline.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColors.primary),
+          const SizedBox(height: 16),
+          Text(
+            value,
+            style: context.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
+              color: context.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: context.textTheme.bodyMedium?.copyWith(height: 1.55),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StrengthCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String description;
 
-  const _WhatIDoItem({
+  const _StrengthCard({
     required this.icon,
     required this.title,
     required this.description,
   });
-}
-
-class _WhatIDoChip extends StatefulWidget {
-  final _WhatIDoItem item;
-
-  const _WhatIDoChip({required this.item});
-
-  @override
-  State<_WhatIDoChip> createState() => _WhatIDoChipState();
-}
-
-class _WhatIDoChipState extends State<_WhatIDoChip> {
-  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final isDark = context.isDarkMode;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: Tooltip(
-        message: widget.item.description,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: _isHovered
-                ? colorScheme.primary.withValues(alpha: 0.1)
-                : (isDark ? AppColors.darkCard : AppColors.lightBgSecondary),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _isHovered
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : colorScheme.outline.withValues(alpha: 0.2),
-              width: 1,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(
+          color: context.colorScheme.outline.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: AppColors.accent),
+          ),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  description,
+                  style: context.textTheme.bodyMedium?.copyWith(height: 1.7),
+                ),
+              ],
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                widget.item.icon,
-                size: 18,
-                color: _isHovered
-                    ? colorScheme.primary
-                    : colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                widget.item.title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: _isHovered
-                      ? colorScheme.primary
-                      : colorScheme.onSurface,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

@@ -3,51 +3,51 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const Color primary50 = Color(0xFFEEF2FF);
-  static const Color primary100 = Color(0xFFE0E7FF);
-  static const Color primary200 = Color(0xFFC7D2FE);
-  static const Color primary300 = Color(0xFFA5B4FC);
-  static const Color primary400 = Color(0xFF818CF8);
-  static const Color primary500 = Color(0xFF6366F1);
-  static const Color primary600 = Color(0xFF4F46E5);
-  static const Color primary700 = Color(0xFF4338CA);
-  static const Color primary800 = Color(0xFF3730A3);
-  static const Color primary900 = Color(0xFF312E81);
-  static const Color primary950 = Color(0xFF1E1B4B);
+  static const Color primary50 = Color(0xFFF5F3FF);
+  static const Color primary100 = Color(0xFFEDE9FE);
+  static const Color primary200 = Color(0xFFDDD6FE);
+  static const Color primary300 = Color(0xFFC4B5FD);
+  static const Color primary400 = Color(0xFFA78BFA);
+  static const Color primary500 = Color(0xFF8B5CF6);
+  static const Color primary600 = Color(0xFF7C3AED);
+  static const Color primary700 = Color(0xFF6D28D9);
+  static const Color primary800 = Color(0xFF5B21B6);
+  static const Color primary900 = Color(0xFF4C1D95);
+  static const Color primary950 = Color(0xFF2E1065);
 
   static const Color primaryLight = primary400;
   static const Color primary = primary500;
   static const Color primaryDark = primary700;
   static const Color primaryDarker = primary900;
 
-  static const Color accent50 = Color(0xFFECFEFF);
-  static const Color accent100 = Color(0xFFCFFAFE);
-  static const Color accent200 = Color(0xFFA5F3FC);
-  static const Color accent300 = Color(0xFF67E8F9);
-  static const Color accent400 = Color(0xFF22D3EE);
-  static const Color accent500 = Color(0xFF06B6D4);
-  static const Color accent600 = Color(0xFF0891B2);
-  static const Color accent700 = Color(0xFF0E7490);
-  static const Color accent800 = Color(0xFF155E75);
-  static const Color accent900 = Color(0xFF164E63);
-  static const Color accent950 = Color(0xFF083344);
+  static const Color accent50 = Color(0xFFEFF6FF);
+  static const Color accent100 = Color(0xFFDBEAFE);
+  static const Color accent200 = Color(0xFFBFDBFE);
+  static const Color accent300 = Color(0xFF93C5FD);
+  static const Color accent400 = Color(0xFF60A5FA);
+  static const Color accent500 = Color(0xFF3B82F6);
+  static const Color accent600 = Color(0xFF2563EB);
+  static const Color accent700 = Color(0xFF1D4ED8);
+  static const Color accent800 = Color(0xFF1E40AF);
+  static const Color accent900 = Color(0xFF1E3A8A);
+  static const Color accent950 = Color(0xFF172554);
 
   static const Color accentLight = accent400;
   static const Color accent = accent500;
   static const Color accentDark = accent600;
   static const Color accentDarker = accent800;
 
-  static const Color secondary50 = Color(0xFFFAF5FF);
-  static const Color secondary100 = Color(0xFFF3E8FF);
-  static const Color secondary200 = Color(0xFFE9D5FF);
-  static const Color secondary300 = Color(0xFFD8B4FE);
-  static const Color secondary400 = Color(0xFFC084FC);
-  static const Color secondary500 = Color(0xFFA855F7);
-  static const Color secondary600 = Color(0xFF9333EA);
-  static const Color secondary700 = Color(0xFF7C3AED);
-  static const Color secondary800 = Color(0xFF6B21A8);
-  static const Color secondary900 = Color(0xFF581C87);
-  static const Color secondary950 = Color(0xFF3B0764);
+  static const Color secondary50 = Color(0xFFFDF2F8);
+  static const Color secondary100 = Color(0xFFFCE7F3);
+  static const Color secondary200 = Color(0xFFFBCFE8);
+  static const Color secondary300 = Color(0xFFF9A8D4);
+  static const Color secondary400 = Color(0xFFF472B6);
+  static const Color secondary500 = Color(0xFFEC4899);
+  static const Color secondary600 = Color(0xFFDB2777);
+  static const Color secondary700 = Color(0xFFBE185D);
+  static const Color secondary800 = Color(0xFF9D174D);
+  static const Color secondary900 = Color(0xFF831843);
+  static const Color secondary950 = Color(0xFF500724);
 
   static const Color secondaryLight = secondary400;
   static const Color secondary = secondary500;
@@ -129,48 +129,48 @@ class AppColors {
   static const Color neutral900 = Color(0xFF171717);
   static const Color neutral950 = Color(0xFF0A0A0A);
 
-  static const Color darkBg = Color(0xFF0A0A0A);
-  static const Color darkBgSecondary = Color(0xFF111111);
-  static const Color darkBgTertiary = Color(0xFF1A1A1A);
-  static const Color darkBgElevated = Color(0xFF1E1E1E);
+  static const Color darkBg = Color(0xFF0B1020);
+  static const Color darkBgSecondary = Color(0xFF10162A);
+  static const Color darkBgTertiary = Color(0xFF161C34);
+  static const Color darkBgElevated = Color(0xFF1D2542);
 
-  static const Color darkCard = Color(0xFF141414);
-  static const Color darkCardHover = Color(0xFF1E1E1E);
-  static const Color darkCardElevated = Color(0xFF242424);
+  static const Color darkCard = Color(0xFF121832);
+  static const Color darkCardHover = Color(0xFF182042);
+  static const Color darkCardElevated = Color(0xFF202951);
 
-  static const Color darkBorder = Color(0xFF262626);
-  static const Color darkBorderLight = Color(0xFF333333);
-  static const Color darkBorderDark = Color(0xFF1A1A1A);
+  static const Color darkBorder = Color(0xFF283359);
+  static const Color darkBorderLight = Color(0xFF364575);
+  static const Color darkBorderDark = Color(0xFF1A2141);
 
-  static const Color darkTextPrimary = Color(0xFFFAFAFA);
-  static const Color darkTextSecondary = Color(0xFFA3A3A3);
-  static const Color darkTextTertiary = Color(0xFF737373);
-  static const Color darkTextMuted = Color(0xFF525252);
-  static const Color darkTextDisabled = Color(0xFF404040);
+  static const Color darkTextPrimary = Color(0xFFF8FAFF);
+  static const Color darkTextSecondary = Color(0xFFB6BED9);
+  static const Color darkTextTertiary = Color(0xFF8F99BB);
+  static const Color darkTextMuted = Color(0xFF6F799B);
+  static const Color darkTextDisabled = Color(0xFF50597B);
 
   static const Color darkDivider = Color(0xFF262626);
 
   static const Color darkOverlay = Color(0xCC000000);
   static const Color darkOverlayLight = Color(0x80000000);
 
-  static const Color lightBg = Color(0xFFFAFAFA);
-  static const Color lightBgSecondary = Color(0xFFF5F5F5);
-  static const Color lightBgTertiary = Color(0xFFEEEEEE);
+  static const Color lightBg = Color(0xFFF7F5FF);
+  static const Color lightBgSecondary = Color(0xFFF1EEFF);
+  static const Color lightBgTertiary = Color(0xFFE7E3FF);
   static const Color lightBgElevated = Color(0xFFFFFFFF);
 
   static const Color lightCard = Color(0xFFFFFFFF);
-  static const Color lightCardHover = Color(0xFFF9FAFB);
+  static const Color lightCardHover = Color(0xFFFAF8FF);
   static const Color lightCardElevated = Color(0xFFFFFFFF);
 
-  static const Color lightBorder = Color(0xFFE5E5E5);
-  static const Color lightBorderDark = Color(0xFFD4D4D4);
-  static const Color lightBorderLight = Color(0xFFF0F0F0);
+  static const Color lightBorder = Color(0xFFDBD7F8);
+  static const Color lightBorderDark = Color(0xFFC9C2F0);
+  static const Color lightBorderLight = Color(0xFFEFECFF);
 
-  static const Color lightTextPrimary = Color(0xFF0A0A0A);
-  static const Color lightTextSecondary = Color(0xFF525252);
-  static const Color lightTextTertiary = Color(0xFF737373);
-  static const Color lightTextMuted = Color(0xFFA3A3A3);
-  static const Color lightTextDisabled = Color(0xFFD4D4D4);
+  static const Color lightTextPrimary = Color(0xFF15142B);
+  static const Color lightTextSecondary = Color(0xFF56547A);
+  static const Color lightTextTertiary = Color(0xFF76739A);
+  static const Color lightTextMuted = Color(0xFFA19BC7);
+  static const Color lightTextDisabled = Color(0xFFD7D3F2);
 
   static const Color lightDivider = Color(0xFFE5E5E5);
 
@@ -268,26 +268,26 @@ class AppColors {
   static const Color producthunt = Color(0xFFDA552F);
 
   static const List<Color> chartColors = [
-    Color(0xFF6366F1),
-    Color(0xFF06B6D4),
+    Color(0xFF8B5CF6),
+    Color(0xFF3B82F6),
+    Color(0xFFEC4899),
     Color(0xFF10B981),
     Color(0xFFF59E0B),
     Color(0xFFEF4444),
-    Color(0xFF8B5CF6),
-    Color(0xFFEC4899),
+    Color(0xFF6366F1),
     Color(0xFF14B8A6),
     Color(0xFFF97316),
     Color(0xFF84CC16),
   ];
 
-  static const Color chart1 = Color(0xFF6366F1);
-  static const Color chart2 = Color(0xFF06B6D4);
-  static const Color chart3 = Color(0xFF10B981);
-  static const Color chart4 = Color(0xFFF59E0B);
-  static const Color chart5 = Color(0xFFEF4444);
-  static const Color chart6 = Color(0xFF8B5CF6);
-  static const Color chart7 = Color(0xFFEC4899);
-  static const Color chart8 = Color(0xFF14B8A6);
+  static const Color chart1 = Color(0xFF8B5CF6);
+  static const Color chart2 = Color(0xFF3B82F6);
+  static const Color chart3 = Color(0xFFEC4899);
+  static const Color chart4 = Color(0xFF10B981);
+  static const Color chart5 = Color(0xFFF59E0B);
+  static const Color chart6 = Color(0xFF6366F1);
+  static const Color chart7 = Color(0xFF14B8A6);
+  static const Color chart8 = Color(0xFFF97316);
 
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
@@ -310,19 +310,19 @@ class AppColors {
   static const LinearGradient accentGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [accentLight, accent, accentDark],
+    colors: [accentLight, accent, secondary600],
   );
 
   static const LinearGradient ctaGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [primary, accentDark],
+    colors: [primary, accent, secondary500],
   );
 
   static const LinearGradient ctaGradientHover = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [primaryDark, accent],
+    colors: [primaryDark, secondary600, accent],
   );
 
   static const LinearGradient successGradient = LinearGradient(
@@ -334,31 +334,31 @@ class AppColors {
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFF0A0A0A), Color(0xFF0F0F1A), Color(0xFF0A0A0A)],
+    colors: [Color(0xFF0B1020), Color(0xFF121832), Color(0xFF0B1020)],
   );
 
   static const LinearGradient heroRadialGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1A1A2E), Color(0xFF0A0A0A)],
+    colors: [Color(0xFF1E2147), Color(0xFF0B1020)],
   );
 
   static const RadialGradient heroGlowGradient = RadialGradient(
     center: Alignment.center,
     radius: 0.8,
-    colors: [Color(0x336366F1), Color(0x00000000)],
+    colors: [Color(0x338B5CF6), Color(0x00000000)],
   );
 
   static const LinearGradient cardGradientDark = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
+    colors: [Color(0xFF161D3B), Color(0xFF111731)],
   );
 
   static const LinearGradient cardGradientLight = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF3F0FF)],
   );
 
   static const LinearGradient cardBorderGradient = LinearGradient(
@@ -370,13 +370,13 @@ class AppColors {
   static const LinearGradient glowGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0x336366F1), Color(0x00000000)],
+    colors: [Color(0x338B5CF6), Color(0x00000000)],
   );
 
   static const RadialGradient spotlightGradient = RadialGradient(
     center: Alignment.center,
     radius: 1.0,
-    colors: [Color(0x206366F1), Color(0x00000000)],
+    colors: [Color(0x208B5CF6), Color(0x00000000)],
   );
 
   static const LinearGradient textGradient = LinearGradient(

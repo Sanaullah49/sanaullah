@@ -13,14 +13,21 @@ class GitHubStatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
     final stats = OpenSourceData.githubStats;
 
     final statItems = [
       _StatItem(
         icon: Icons.folder_rounded,
-        value: stats.publicRepos.toString(),
-        label: 'Repositories',
+        value: '${stats.publicRepos}+',
+        label: 'Public Repos',
         color: AppColors.primary,
+      ),
+      _StatItem(
+        icon: Icons.lock_outline_rounded,
+        value: '${stats.privateRepos}+',
+        label: 'Private Repos',
+        color: AppColors.info,
       ),
       _StatItem(
         icon: Icons.star_rounded,
@@ -48,48 +55,65 @@ class GitHubStatsCard extends StatelessWidget {
       ),
     ];
 
-    if (isMobile) {
-      return Column(
-        children: [
-          _buildProfileHeader(context),
-          const SizedBox(height: 24),
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: statItems
-                .map(
-                  (item) => SizedBox(
-                    width: (MediaQuery.of(context).size.width - 80) / 2,
-                    child: _GitHubStatItem(stat: item),
-                  ),
-                )
-                .toList(),
-          ),
-        ],
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final useSingleColumn = constraints.maxWidth < 960;
+        final cardWidth = isMobile
+            ? (constraints.maxWidth - 16) / 2
+            : (useSingleColumn || isTablet
+                  ? (constraints.maxWidth - 24) / 2
+                  : (constraints.maxWidth - 48) / 3);
 
-    return Row(
-      children: [
-        Expanded(flex: 2, child: _buildProfileHeader(context)),
-        const SizedBox(width: 32),
-        Expanded(
-          flex: 5,
-          child: Row(
-            children: statItems
-                .map(
-                  (item) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: _GitHubStatItem(stat: item),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ],
+        if (useSingleColumn) {
+          return Column(
+            children: [
+              _buildProfileHeader(context),
+              const SizedBox(height: 24),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                alignment: WrapAlignment.center,
+                children: statItems
+                    .map(
+                      (item) => SizedBox(
+                        width: cardWidth,
+                        child: _GitHubStatItem(stat: item),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: _buildProfileHeader(context),
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: statItems
+                    .map(
+                      (item) => SizedBox(
+                        width: cardWidth,
+                        child: _GitHubStatItem(stat: item),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -224,7 +248,8 @@ class _GitHubStatItemState extends State<_GitHubStatItem> {
                 ]
               : null,
         ),
-        transform: Matrix4.identity()..translate(0.0, _isHovered ? -4.0 : 0.0),
+        transform: Matrix4.identity()
+          ..translateByDouble(0.0, _isHovered ? -4.0 : 0.0, 0.0, 1.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../core/theme/theme_provider.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../core/widgets/secondary_button.dart';
 import '../../../core/widgets/section_title.dart';
@@ -23,7 +24,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-    final featuredProjects = ProjectsData.featuredProjects;
+    final featuredProjects = ProjectsData.featuredProjects.take(4).toList();
 
     return VisibilityDetector(
       key: const Key('projects-section'),
@@ -37,13 +38,25 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         child: Column(
           children: [
             const SectionTitle(
-              tag: 'PORTFOLIO',
-              title: 'Featured Projects',
+              tag: 'SELECTED WORK',
+              title: 'Projects that show how I think',
               subtitle:
-                  'A selection of my best work showcasing expertise in Flutter, mobile development, and software architecture',
+                  'Different constraints, same goal: ship mobile products that are usable, maintainable, and ready for real users.',
             ),
 
-            SizedBox(height: isMobile ? 48 : 80),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 860),
+              child: Text(
+                'These case studies cover healthcare hardware integration, reusable package work, fintech UX, and consumer-scale mobile delivery.',
+                style: context.textTheme.bodyLarge?.copyWith(
+                  height: 1.8,
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            SizedBox(height: isMobile ? 40 : 64),
 
             _buildProjectsGrid(context, featuredProjects),
 
@@ -112,7 +125,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SecondaryButton(
-          text: 'View All Projects',
+          text: 'See Full Project Archive',
           icon: Icons.arrow_forward_rounded,
           onPressed: () => context.go(RouteNames.projects),
         ),

@@ -67,21 +67,21 @@ class _StatsRowState extends State<StatsRow> {
         _buildStatItem(
           context,
           value: AppConstants.appsPublished,
-          label: 'Apps Published',
+          label: 'Apps Shipped',
           delay: 100,
         ),
         _buildDivider(context),
         _buildStatItem(
           context,
           value: AppConstants.clientSatisfaction,
-          label: 'Client Satisfaction',
+          label: 'Core Domains',
           delay: 200,
         ),
         _buildDivider(context),
         _buildStatItem(
           context,
           value: AppConstants.linesOfCode,
-          label: 'Lines of Code',
+          label: 'Store Platforms',
           delay: 300,
         ),
       ],
@@ -110,7 +110,7 @@ class _StatsRowState extends State<StatsRow> {
               child: _buildStatItem(
                 context,
                 value: AppConstants.appsPublished,
-                label: isMobile ? 'Apps Shipped' : 'Apps Published',
+                label: isMobile ? 'Apps Shipped' : 'Apps Shipped',
                 delay: 100,
                 compact: true,
               ),
@@ -131,7 +131,7 @@ class _StatsRowState extends State<StatsRow> {
               child: _buildStatItem(
                 context,
                 value: AppConstants.clientSatisfaction,
-                label: isMobile ? 'Satisfaction' : 'Client Satisfaction',
+                label: isMobile ? 'Domains' : 'Core Domains',
                 delay: 200,
                 compact: true,
               ),
@@ -141,7 +141,7 @@ class _StatsRowState extends State<StatsRow> {
               child: _buildStatItem(
                 context,
                 value: AppConstants.linesOfCode,
-                label: 'Lines of Code',
+                label: isMobile ? 'Stores' : 'Store Platforms',
                 delay: 300,
                 compact: true,
               ),

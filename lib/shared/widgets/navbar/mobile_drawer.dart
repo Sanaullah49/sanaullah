@@ -77,16 +77,16 @@ class MobileDrawer extends StatelessWidget {
                 ),
                 _buildNavItem(
                   context,
-                  'Blog',
-                  RouteNames.blog,
-                  Icons.article_rounded,
+                  'Contact',
+                  RouteNames.hireMe,
+                  Icons.chat_bubble_rounded,
                 ),
 
                 const SizedBox(height: 32),
 
                 PrimaryButton(
-                  text: 'Hire Me',
-                  icon: Icons.rocket_launch_rounded,
+                  text: 'Start A Project',
+                  icon: Icons.arrow_upward_rounded,
                   fullWidth: true,
                   onPressed: () {
                     Navigator.pop(context);
@@ -111,8 +111,6 @@ class MobileDrawer extends StatelessWidget {
                     SocialButton.linkedin(),
                     const SizedBox(width: 16),
                     SocialButton.twitter(),
-                    const SizedBox(width: 16),
-                    SocialButton.buyMeACoffee(),
                   ],
                 ),
 

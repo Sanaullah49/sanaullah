@@ -1,115 +1,131 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'color_schemes.dart';
 
 class AppTheme {
   AppTheme._();
 
+  static const String _fontFamily = 'Satoshi';
+
   static TextTheme _buildTextTheme(ColorScheme colorScheme) {
     final Color textColor = colorScheme.onSurface;
     final Color secondaryTextColor = colorScheme.onSurfaceVariant;
 
     return TextTheme(
-      displayLarge: GoogleFonts.spaceGrotesk(
+      displayLarge: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 72,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w900,
         letterSpacing: -2,
         height: 1.1,
         color: textColor,
       ),
-      displayMedium: GoogleFonts.spaceGrotesk(
+      displayMedium: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 56,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w900,
         letterSpacing: -1.5,
         height: 1.15,
         color: textColor,
       ),
-      displaySmall: GoogleFonts.spaceGrotesk(
+      displaySmall: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 44,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         letterSpacing: -1,
         height: 1.2,
         color: textColor,
       ),
 
-      headlineLarge: GoogleFonts.spaceGrotesk(
+      headlineLarge: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 36,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
         height: 1.25,
         color: textColor,
       ),
-      headlineMedium: GoogleFonts.spaceGrotesk(
+      headlineMedium: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 28,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         letterSpacing: -0.25,
         height: 1.3,
         color: textColor,
       ),
-      headlineSmall: GoogleFonts.spaceGrotesk(
+      headlineSmall: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 24,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         height: 1.35,
         color: textColor,
       ),
 
-      titleLarge: GoogleFonts.inter(
+      titleLarge: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 22,
         fontWeight: FontWeight.w600,
         height: 1.4,
         color: textColor,
       ),
-      titleMedium: GoogleFonts.inter(
+      titleMedium: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
         height: 1.45,
         color: textColor,
       ),
-      titleSmall: GoogleFonts.inter(
+      titleSmall: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         height: 1.5,
         color: textColor,
       ),
 
-      bodyLarge: GoogleFonts.inter(
+      bodyLarge: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w400,
         height: 1.7,
         color: secondaryTextColor,
       ),
-      bodyMedium: GoogleFonts.inter(
+      bodyMedium: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         height: 1.65,
         color: secondaryTextColor,
       ),
-      bodySmall: GoogleFonts.inter(
+      bodySmall: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         height: 1.6,
         color: secondaryTextColor,
       ),
 
-      labelLarge: GoogleFonts.inter(
+      labelLarge: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.5,
         height: 1.4,
         color: textColor,
       ),
-      labelMedium: GoogleFonts.inter(
+      labelMedium: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.4,
+        letterSpacing: 0.6,
         height: 1.35,
         color: textColor,
       ),
-      labelSmall: GoogleFonts.inter(
+      labelSmall: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.3,
+        letterSpacing: 0.5,
         height: 1.3,
         color: secondaryTextColor,
       ),
@@ -124,8 +140,9 @@ class AppTheme {
         elevation: 0,
         shadowColor: Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: GoogleFonts.inter(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        textStyle: const TextStyle(
+          fontFamily: _fontFamily,
           fontSize: 16,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.3,
@@ -140,8 +157,9 @@ class AppTheme {
         foregroundColor: colorScheme.primary,
         side: BorderSide(color: colorScheme.outline, width: 1.5),
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: GoogleFonts.inter(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        textStyle: const TextStyle(
+          fontFamily: _fontFamily,
           fontSize: 16,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.3,
@@ -156,7 +174,11 @@ class AppTheme {
         foregroundColor: colorScheme.primary,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        textStyle: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -186,12 +208,14 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(color: colorScheme.error, width: 2),
       ),
-      labelStyle: GoogleFonts.inter(
+      labelStyle: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
         color: colorScheme.onSurfaceVariant,
       ),
-      hintStyle: GoogleFonts.inter(
+      hintStyle: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
@@ -215,7 +239,8 @@ class AppTheme {
   static ChipThemeData _chipTheme(ColorScheme colorScheme) {
     return ChipThemeData(
       backgroundColor: colorScheme.surfaceContainerHighest,
-      labelStyle: GoogleFonts.inter(
+      labelStyle: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: colorScheme.onSurfaceVariant,
@@ -232,7 +257,8 @@ class AppTheme {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
-      titleTextStyle: GoogleFonts.spaceGrotesk(
+      titleTextStyle: TextStyle(
+        fontFamily: _fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
         color: colorScheme.onSurface,
@@ -280,7 +306,8 @@ class AppTheme {
           color: colorScheme.inverseSurface,
           borderRadius: BorderRadius.circular(8),
         ),
-        textStyle: GoogleFonts.inter(
+        textStyle: TextStyle(
+          fontFamily: _fontFamily,
           fontSize: 14,
           color: colorScheme.onInverseSurface,
         ),
@@ -329,7 +356,8 @@ class AppTheme {
           color: colorScheme.inverseSurface,
           borderRadius: BorderRadius.circular(8),
         ),
-        textStyle: GoogleFonts.inter(
+        textStyle: TextStyle(
+          fontFamily: _fontFamily,
           fontSize: 14,
           color: colorScheme.onInverseSurface,
         ),

@@ -68,6 +68,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
   @override
   Widget build(BuildContext context) {
     final gradient = widget.gradient ?? AppColors.ctaGradient;
+    final isCompact = MediaQuery.of(context).size.width < 400;
 
     return SizedBox(
       width: widget.fullWidth ? double.infinity : widget.width,
@@ -88,7 +89,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: EdgeInsets.symmetric(horizontal: isCompact ? 20 : 32),
               decoration: BoxDecoration(
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(12),
@@ -106,24 +107,31 @@ class _PrimaryButtonState extends State<PrimaryButton>
                           strokeWidth: 2.5,
                         ),
                       )
-                    : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (widget.icon != null) ...[
-                            Icon(widget.icon, color: Colors.white, size: 20),
-                            const SizedBox(width: 10),
-                          ],
-                          Text(
-                            widget.text,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.3,
+                    : FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (widget.icon != null) ...[
+                              Icon(
+                                widget.icon,
+                                color: Colors.white,
+                                size: isCompact ? 18 : 20,
+                              ),
+                              SizedBox(width: isCompact ? 8 : 10),
+                            ],
+                            Text(
+                              widget.text,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isCompact ? 15 : 16,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.3,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
               ),
             ),

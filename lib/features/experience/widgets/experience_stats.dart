@@ -13,7 +13,6 @@ class ExperienceStats extends StatelessWidget {
     final isMobile = context.isMobile;
     final isTablet = context.isTablet;
     final isSmallMobile = MediaQuery.of(context).size.width < 380;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     final stats = [
       _StatItem(
@@ -30,7 +29,7 @@ class ExperienceStats extends StatelessWidget {
       ),
       _StatItem(
         icon: Icons.apps_rounded,
-        value: '10+',
+        value: '25+',
         label: 'Apps Shipped',
         color: AppColors.success,
       ),
@@ -42,63 +41,68 @@ class ExperienceStats extends StatelessWidget {
       ),
     ];
 
-    if (isSmallMobile) {
-      return Column(
-        children: stats
-            .map(
-              (stat) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _ExperienceStatCard(stat: stat),
-              ),
-            )
-            .toList(),
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (isSmallMobile || constraints.maxWidth < 340) {
+          return Column(
+            children: stats
+                .map(
+                  (stat) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _ExperienceStatCard(stat: stat),
+                  ),
+                )
+                .toList(),
+          );
+        }
 
-    if (isMobile) {
-      final cardWidth = (screenWidth - 64) / 2;
-      return Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        alignment: WrapAlignment.center,
-        children: stats
-            .map(
-              (stat) => SizedBox(
-                width: cardWidth,
-                child: _ExperienceStatCard(stat: stat),
-              ),
-            )
-            .toList(),
-      );
-    }
+        if (isMobile) {
+          final cardWidth = (constraints.maxWidth - 12) / 2;
+          return Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            alignment: WrapAlignment.center,
+            children: stats
+                .map(
+                  (stat) => SizedBox(
+                    width: cardWidth,
+                    child: _ExperienceStatCard(stat: stat),
+                  ),
+                )
+                .toList(),
+          );
+        }
 
-    if (isTablet) {
-      return Wrap(
-        spacing: 20,
-        runSpacing: 20,
-        alignment: WrapAlignment.center,
-        children: stats
-            .map(
-              (stat) => SizedBox(
-                width: (screenWidth * 0.8 - 60) / 2,
-                child: _ExperienceStatCard(stat: stat),
-              ),
-            )
-            .toList(),
-      );
-    }
+        if (isTablet) {
+          final cardWidth = (constraints.maxWidth - 20) / 2;
+          return Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            alignment: WrapAlignment.center,
+            children: stats
+                .map(
+                  (stat) => SizedBox(
+                    width: cardWidth,
+                    child: _ExperienceStatCard(stat: stat),
+                  ),
+                )
+                .toList(),
+          );
+        }
 
-    return Row(
-      children: stats
-          .map(
-            (stat) => Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: _ExperienceStatCard(stat: stat),
-              ),
-            ),
-          )
-          .toList(),
+        return Row(
+          children: stats
+              .map(
+                (stat) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: _ExperienceStatCard(stat: stat),
+                  ),
+                ),
+              )
+              .toList(),
+        );
+      },
     );
   }
 }
@@ -181,7 +185,7 @@ class _ExperienceStatCardState extends State<_ExperienceStatCard> {
                   ),
                 ],
         ),
-        transform: Matrix4.identity()..translate(0.0, _isHovered ? -5.0 : 0.0),
+        transform: Matrix4.translationValues(0.0, _isHovered ? -5.0 : 0.0, 0.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -388,6 +388,8 @@ class _ProjectDetailContent extends StatelessWidget {
         imagePath: project.mockupImage,
         accentColor: project.accentColor,
         screenshots: project.screenshots,
+        title: project.title,
+        eyebrow: project.category.label,
       ),
     );
   }
