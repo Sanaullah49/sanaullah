@@ -147,7 +147,8 @@ class _TimelineItemState extends State<TimelineItem> {
           ),
         ],
       ),
-      transform: Matrix4.identity()..translate(_isHovered ? 8.0 : 0.0, 0.0),
+      transform: Matrix4.identity()
+        ..translateByDouble(_isHovered ? 8.0 : 0.0, 0.0, 0.0, 1.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

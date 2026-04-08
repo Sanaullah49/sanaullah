@@ -264,7 +264,7 @@ class _PhoneMockupLargeState extends State<PhoneMockupLarge> {
             width: mockupWidth,
             height: mockupHeight,
             transform: Matrix4.identity()
-              ..translate(0.0, _isHovered ? -10.0 : 0.0),
+              ..translateByDouble(0.0, _isHovered ? -10.0 : 0.0, 0.0, 1.0),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7),
               borderRadius: BorderRadius.circular(45),

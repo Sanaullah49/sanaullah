@@ -55,7 +55,7 @@ class _BlogCardState extends State<BlogCard>
             ],
           ),
           transform: Matrix4.identity()
-            ..translate(0.0, _isHovered ? -6.0 : 0.0),
+            ..translateByDouble(0.0, _isHovered ? -6.0 : 0.0, 0.0, 1.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

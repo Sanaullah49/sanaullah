@@ -169,7 +169,13 @@ class _AboutImageState extends State<AboutImage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 300),
       width: size,
       height: size,
-      transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
+      transform: Matrix4.identity()
+        ..scaleByDouble(
+          _isHovered ? 1.02 : 1.0,
+          _isHovered ? 1.02 : 1.0,
+          _isHovered ? 1.02 : 1.0,
+          1.0,
+        ),
       transformAlignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
@@ -272,7 +278,13 @@ class _ExperienceBadge extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       padding: const EdgeInsets.all(20),
-      transform: Matrix4.identity()..scale(isHovered ? 1.05 : 1.0),
+      transform: Matrix4.identity()
+        ..scaleByDouble(
+          isHovered ? 1.05 : 1.0,
+          isHovered ? 1.05 : 1.0,
+          isHovered ? 1.05 : 1.0,
+          1.0,
+        ),
       transformAlignment: Alignment.center,
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkCard : AppColors.lightCard,
@@ -360,7 +372,13 @@ class _CodeBadgeState extends State<_CodeBadge>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.all(16),
-        transform: Matrix4.identity()..scale(widget.isHovered ? 1.05 : 1.0),
+        transform: Matrix4.identity()
+          ..scaleByDouble(
+            widget.isHovered ? 1.05 : 1.0,
+            widget.isHovered ? 1.05 : 1.0,
+            widget.isHovered ? 1.05 : 1.0,
+            1.0,
+          ),
         transformAlignment: Alignment.center,
         decoration: BoxDecoration(
           gradient: AppColors.primaryGradient,
